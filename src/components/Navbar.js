@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import {  Link } from "react-router-dom";
-import Login from "./login.component";
-import Register from "./register.component";
-import AuthService from "../services/auth.service";
+import Login from "./Login";
+import Register from "./Register";
+import AuthService from "../services/AuthService";
 class Navbar extends Component {
 
   constructor(props) {
