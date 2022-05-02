@@ -11,7 +11,13 @@ class Car extends React.Component {
     };
   }
   changeColor = () => {
-    this.setState({color: "blue"});
+    if (this.state.color=="red") {
+      this.setState({color: "blue"});
+    }
+    else {
+      this.setState({color: "red"});
+    }
+
   }
   render() {
     return (

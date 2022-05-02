@@ -5,38 +5,18 @@ import Navbar from "./components/Navbar";
 import Articles from "./pages/Articles";
 import About from "./pages/About";
 import ArticlesContainer from "./components/ArticlesContainer";
-import AuthService from "./services/auth.service";
+
 import Login from "./components/login.component";
 import Register from "./components/register.component";
 import Home from "./components/home.component";
 import Profile from "./components/profile.component";
-import BoardUStudent from "./components/board-student.component";
+import BoardStudent from "./components/board-student.component";
 import BoardTeacher from "./components/board-teacher.component";
 import BoardAdmin from "./components/board-admin.component";
 import Car from "./components/Car";
 
 class App extends Component {
-  constructor(props) {
-      super(props);
-      this.logOut = this.logOut.bind(this);
-      this.state = {
-        showModeratorBoard: false,
-        showAdminBoard: false,
-        currentUser: undefined,
-      };
-    }
-    componentDidMount() {
-      const user = AuthService.getCurrentUser();
-      if (user) {
-        this.setState({
-          currentUser: user,
-          userRole: user.role,
-        });
-      }
-    }
-    logOut() {
-      AuthService.logout();
-    }
+
 
   render() {
     return (
@@ -56,6 +36,12 @@ class App extends Component {
             <Route path='/articles' element={<Articles/>} />
             <Route path='/about' element={<About/>} />
             <Route path="*" element={<NoMatch />} />
+            <Route exact path="/login" element={<Login/>} />
+            <Route exact path="/register" element={<Register/>} />
+            <Route exact path="/profile" element={<Profile/>} />
+            <Route path="/student" element={<BoardStudent/>} />
+            <Route path="/teacher" element={<BoardTeacher/>} />
+            <Route path="/admin" element={<BoardAdmin/>} />
           </Routes>
           </div>
         </div>

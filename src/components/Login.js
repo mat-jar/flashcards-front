@@ -3,6 +3,7 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import AuthService from "../services/auth.service";
+import { useNavigate} from "react-router-dom";
 const required = value => {
   if (!value) {
     return (
@@ -12,22 +13,25 @@ const required = value => {
     );
   }
 };
-export default class Login extends Component {
+
+
+
+ class Login extends Component {
   constructor(props) {
     super(props);
     this.handleLogin = this.handleLogin.bind(this);
-    this.onChangeUsername = this.onChangeUsername.bind(this);
+    this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
     this.state = {
-      username: "",
+      email: "",
       password: "",
       loading: false,
       message: ""
     };
   }
-  onChangeUsername(e) {
+  onChangeEmail(e) {
     this.setState({
-      username: e.target.value
+      email: e.target.value
     });
   }
   onChangePassword(e) {
@@ -35,7 +39,12 @@ export default class Login extends Component {
       password: e.target.value
     });
   }
+
+
+
+
   handleLogin(e) {
+    const {navigation} = this.props;
     e.preventDefault();
     this.setState({
       message: "",
@@ -43,10 +52,12 @@ export default class Login extends Component {
     });
     this.form.validateAll();
     if (this.checkBtn.context._errors.length === 0) {
-      AuthService.login(this.state.username, this.state.password).then(
-        () => {
-          this.props.history.push("/profile");
-          window.location.reload();
+      AuthService.login(this.state.email, this.state.password).then(
+        data => {
+          this.setState({
+            message: data.message,
+          });
+          //navigation("/about");
         },
         error => {
           const resMessage =
@@ -68,14 +79,10 @@ export default class Login extends Component {
     }
   }
   render() {
+
     return (
       <div className="col-md-12">
         <div className="card card-container">
-          <img
-            src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-            alt="profile-img"
-            className="profile-img-card"
-          />
           <Form
             onSubmit={this.handleLogin}
             ref={c => {
@@ -83,13 +90,13 @@ export default class Login extends Component {
             }}
           >
             <div className="form-group">
-              <label htmlFor="username">Username</label>
+              <label htmlFor="email">Email</label>
               <Input
                 type="text"
                 className="form-control"
-                name="username"
-                value={this.state.username}
-                onChange={this.onChangeUsername}
+                name="email"
+                value={this.state.email}
+                onChange={this.onChangeEmail}
                 validations={[required]}
               />
             </div>
@@ -133,4 +140,9 @@ export default class Login extends Component {
       </div>
     );
   }
+}
+export default function(props) {
+  const navigation = useNavigate();
+
+  return <Login {...props} navigation={navigation} />;
 }
