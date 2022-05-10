@@ -5,14 +5,17 @@ import Navbar from "./components/Navbar";
 import Articles from "./pages/Articles";
 import About from "./pages/About";
 import ArticlesContainer from "./components/ArticlesContainer";
+import FlashcardSetList from "./components/FlashcardSetList";
+import FlashcardSet from "./components/FlashcardSet";
+import FlashcardSet1 from "./components/FlashcardSet1";
 
-import Login from "./components/login.component";
-import Register from "./components/register.component";
-import Home from "./components/home.component";
-import Profile from "./components/profile.component";
-import BoardStudent from "./components/board-student.component";
-import BoardTeacher from "./components/board-teacher.component";
-import BoardAdmin from "./components/board-admin.component";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import Home from "./components/Home";
+import Profile from "./components/Profile";
+import BoardStudent from "./components/BoardStudent";
+import BoardTeacher from "./components/BoardTeacher";
+import BoardAdmin from "./components/BoardAdmin";
 import Car from "./components/Car";
 
 class App extends Component {
@@ -32,8 +35,12 @@ class App extends Component {
           <h1>Articles App</h1>
           <div className="pageContent">
           <Routes>
-            <Route index element={<Articles/>} />
-            <Route path='/articles' element={<Articles/>} />
+            <Route index element={<About/>} />
+            <Route exact path='/articles' element={<Articles/>} />
+            <Route path='/flashcard_set_list' element={<FlashcardSetList/>} />
+            <Route path='/articles/:id' element={<Car/>} />
+            <Route path='/flashcard_sets/:id' element={<FlashcardSet/>} />
+            <Route path='/flashcard_sets1/:id' element={<FlashcardSet1/>} />
             <Route path='/about' element={<About/>} />
             <Route path="*" element={<NoMatch />} />
             <Route exact path="/login" element={<Login/>} />

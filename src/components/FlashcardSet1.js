@@ -8,9 +8,7 @@ class FlashcardSet extends Component {
     super(props);
     this.state = {
       flashcards: [],
-      flashcard_set_id: window.location.pathname.split("/").slice(-1),
-      inputFrontText: "",
-      inputBackText: ""
+      flashcard_set_id: window.location.pathname.split("/").slice(-1)
 
     };
   }
@@ -28,20 +26,9 @@ class FlashcardSet extends Component {
     this.loadFlashcards();
   }
 
-
-
-  handleInputChange = (e) => {
-    const { name, value } = e.target;
-    //debugger;
-    //const name = e.target.name
-    //const value = e.target.value
-
-    this.setState({
-
-    [name]: value
-    });
-//debugger;
-  };
+  handleChange = (e) => {
+  this.setState({inputValue: e.target.front_text});
+  }
 
   modifyFlashcard = (e, id) => {
   axios
@@ -75,9 +62,9 @@ axios
 };
 
   newFlashcard= (e) => {
-  if (e.key === "Enter" && !(this.state.inputBackText === "") && !(this.state.inputFrontText === "")) {
+  if (e.key === "Enter" && !(e.target.front_text === "")) {
     axios
-      .post(`/api/v1/flashcard_sets/${this.state.flashcard_set_id}/flashcards`, { flashcard: { front_text: this.state.inputFrontText, back_text: this.state.inputBackText, } })
+      .post(`/api/v1/flashcard_sets/${this.state.flashcard_set_id}/flashcards`, { flashcard: { front_text: e.target.value, back_text: e.target.value } })
       .then((response) => {
         const flashcards = update(this.state.flashcards, {
           $splice: [[0, 0, response.data]],
@@ -85,8 +72,7 @@ axios
 
         this.setState({
           flashcards: flashcards,
-          inputFrontText: "",
-          inputBackText: ""
+          inputValue: "",
         });
       })
       .catch((error) => console.log(error));
@@ -103,20 +89,10 @@ axios
             placeholder="Input a Flashcard and Press Enter"
             maxLength="75"
             onKeyPress={this.newFlashcard}
-            value={this.state.inputFrontText}
-            onChange={this.handleInputChange}
-            name="inputFrontText"
+            value={this.state.inputValue}
+            onChange={this.handleChange}
           />
-          <input
-            className="newFlashcard"
-            type="string"
-            placeholder="Input a Flashcard and Press Enter"
-            maxLength="75"
-            onKeyPress={this.newFlashcard}
-            value={this.state.inputBackText}
-            onChange={this.handleInputChange}
-            name="inputBackText"
-          />
+
         </div>
         <div className="wrapItems">
           <ul className="listItems">
@@ -128,7 +104,7 @@ axios
                 onChange={(e) => this.modifyFlashcard(e, flashcard.id)} />
 
                   <label className="itemDisplay">{flashcard.front_text}</label>
-                  <label className="itemDisplay">{flashcard.back_text}</label>
+
 
                   <span className="removeItemButton"
                   onClick={(e) =>

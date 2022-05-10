@@ -1,74 +1,85 @@
 import React, { Component } from "react";
 import axios from "axios";
 import update from "immutability-helper";
+import {  Link } from "react-router-dom";
+import AuthService from "../services/AuthService";
 
-class ArticlesContainer extends Component {
+class FlashcardSetList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      articles: [],
+      flashcard_sets: [],
+      currentUser: undefined,
+      userRole: undefined,
     };
   }
 
-  loadArticles() {
+  loadFlashcardSets() {
     axios
-      .get("/api/v1/articles")
-      .then((res) => {
-        this.setState({ articles: res.data });
+      .get("/api/v1/flashcard_sets")
+      .then((response) => {
+        this.setState({ flashcard_sets: response.data });
       })
       .catch((error) => console.log(error));
   }
 
   componentDidMount() {
-    this.loadArticles();
+    this.loadFlashcardSets();
+    const user = AuthService.getCurrentUser();
+    if (user) {
+      this.setState({
+        currentUser: user,
+        userRole: user.role,
+      });
+    }
   }
 
   handleChange = (e) => {
   this.setState({inputValue: e.target.value});
   }
 
-  modifyArticle = (e, id) => {
+  modifyFlashcardSet = (e, id) => {
   axios
-    .put(`/api/v1/articles/${id}`, { article: { read: e.target.checked } })
-    .then((res) => {
-      const articleIndex = this.state.articles.findIndex(
-        (x) => x.id === res.data.id
+    .put(`/api/v1/flashcard_sets/${id}`, { flashcard_set: { read: e.target.checked } })
+    .then((response) => {
+      const flashcard_setIndex = this.state.flashcard_sets.findIndex(
+        (x) => x.id === response.data.id
       );
-      const articles = update(this.state.articles, {
-        [articleIndex]: { $set: res.data },
+      const flashcard_sets = update(this.state.flashcard_sets, {
+        [flashcard_setIndex]: { $set: response.data },
       });
       this.setState({
-        articles: articles,
+        flashcard_sets: flashcard_sets,
       });
     })
     .catch((error) => console.log(error));
 };
-removeArticle = (id) => {
+removeFlashcardSet = (id) => {
 axios
-  .delete(`/api/v1/articles/${id}`)
-  .then((res) => {
-    const articleIndex = this.state.articles.findIndex((x) => x.id === id);
-    const articles = update(this.state.articles, {
-      $splice: [[articleIndex, 1]],
+  .delete(`/api/v1/flashcard_sets/${id}`)
+  .then((response) => {
+    const flashcard_setIndex = this.state.flashcard_sets.findIndex((x) => x.id === id);
+    const flashcard_sets = update(this.state.flashcard_sets, {
+      $splice: [[flashcard_setIndex, 1]],
     });
     this.setState({
-      articles: articles,
+      flashcard_sets: flashcard_sets,
     });
   })
   .catch((error) => console.log(error));
 };
 
-  newArticle= (e) => {
+  newFlashcardSet= (e) => {
   if (e.key === "Enter" && !(e.target.value === "")) {
     axios
-      .post("/api/v1/articles", { article: { title: e.target.value } })
-      .then((res) => {
-        const articles = update(this.state.articles, {
-          $splice: [[0, 0, res.data]],
+      .post("/api/v1/flashcard_sets", { flashcard_set: { title: e.target.value } })
+      .then((response) => {
+        const flashcard_sets = update(this.state.flashcard_sets, {
+          $splice: [[0, 0, response.data]],
         });
 
         this.setState({
-          articles: articles,
+          flashcard_sets: flashcard_sets,
           inputValue: "",
         });
       })
@@ -77,32 +88,39 @@ axios
 };
 
   render() {
+    const { currentUser, userRole } = this.state;
     return (
       <div>
-        <div className="articleContainer">
+       {currentUser ? (
+        <div className="newFlashcardSetForm">
           <input
-            className="newArticle"
+            className="newFlashcardSet"
             type="string"
-            placeholder="Input a Article and Press Enter"
+            placeholder="Input a FlashcardSet and Press Enter"
             maxLength="75"
-            onKeyPress={this.newArticle}
+            onKeyPress={this.newFlashcardSet}
             value={this.state.inputValue}
             onChange={this.handleChange}
           />
         </div>
+      ) : (
+        <h2>Log in to add new Flashcard Set</h2>
+      )}
         <div className="wrapItems">
           <ul className="listItems">
-            {this.state.articles.map((article) => {
+            {this.state.flashcard_sets.map((flashcard_set) => {
               return (
-                <li className="item" article={article} key={article.id}>
+                <li className="item" flashcard_set={flashcard_set} key={flashcard_set.id}>
                 <input className="itemCheckbox" type="checkbox"
-                checked={article.read}
-                onChange={(e) => this.modifyArticle(e, article.id)} />
-                  <label className="itemDisplay">{article.title}</label>
+                checked={flashcard_set.read}
+                onChange={(e) => this.modifyFlashcardSet(e, flashcard_set.id)} />
+                  <Link to={`/flashcard_sets/${flashcard_set.id}`}>
+                  <label className="itemDisplay">{flashcard_set.title}</label>
+                  </Link>
                   <span className="removeItemButton"
                   onClick={(e) =>
-                  {if (window.confirm("Delete the article")) {
-                  this.removeArticle(article.id);
+                  {if (window.confirm("Delete the flashcard set")) {
+                  this.removeFlashcardSet(flashcard_set.id);
                   }
                   }
                   }
@@ -119,4 +137,4 @@ axios
   }
 }
 
-export default ArticlesContainer;
+export default FlashcardSetList;

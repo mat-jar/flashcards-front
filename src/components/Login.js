@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
-import AuthService from "../services/auth.service";
+import AuthService from "../services/AuthService";
 import { useNavigate} from "react-router-dom";
 const required = value => {
   if (!value) {
@@ -55,7 +55,7 @@ const required = value => {
       AuthService.login(this.state.email, this.state.password).then(
         data => {
           this.setState({
-            message: data.message,
+            //message: data.message,
           });
           //navigation("/about");
         },

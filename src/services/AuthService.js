@@ -10,12 +10,12 @@ class AuthService {
       }
       })
       .then(response => {
-        if (response.data.auth_token) {
+        //if (response.data.auth_token) {
         //localStorage.setItem("header_obj", response.headers.authorization);
         //localStorage.setItem("header-data1", response.data.auth_token);
         localStorage.setItem("user", JSON.stringify(response.data));
-        }
-        return response.data;
+        //}
+        //return response.data;
       });
   }
   logout() {
