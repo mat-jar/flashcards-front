@@ -16,7 +16,7 @@ const required = value => {
 
 
 
- class Login extends Component {
+ class LogIn extends Component {
   constructor(props) {
     super(props);
     this.handleLogin = this.handleLogin.bind(this);
@@ -26,6 +26,7 @@ const required = value => {
       email: "",
       password: "",
       loading: false,
+      successful: false,
       message: ""
     };
   }
@@ -40,24 +41,29 @@ const required = value => {
     });
   }
 
-
-
-
   handleLogin(e) {
     const {navigation} = this.props;
+    var t;
     e.preventDefault();
     this.setState({
       message: "",
-      loading: true
+      loading: true,
+      successful: false
     });
     this.form.validateAll();
     if (this.checkBtn.context._errors.length === 0) {
       AuthService.login(this.state.email, this.state.password).then(
-        data => {
+        response => {
           this.setState({
-            //message: data.message,
+            message: response.data.message,
+            successful: true
           });
-          //navigation("/about");
+          this.props.setUser()
+          const timer = setTimeout(() => {
+            navigation("/dashboard")
+          }, 1000);
+          return () => clearTimeout(timer);
+          ;
         },
         error => {
           const resMessage =
@@ -89,6 +95,8 @@ const required = value => {
               this.form = c;
             }}
           >
+          {!this.state.successful && (
+            <div>
             <div className="form-group">
               <label htmlFor="email">Email</label>
               <Input
@@ -119,12 +127,21 @@ const required = value => {
                 {this.state.loading && (
                   <span className="spinner-border spinner-border-sm"></span>
                 )}
-                <span>Login</span>
+                <span>Log in</span>
               </button>
             </div>
+            </div>
+          )}
             {this.state.message && (
               <div className="form-group">
-                <div className="alert alert-danger" role="alert">
+                <div
+                  className={
+                    this.state.successful
+                      ? "alert alert-success"
+                      : "alert alert-danger"
+                  }
+                  role="alert"
+                >
                   {this.state.message}
                 </div>
               </div>
@@ -144,5 +161,5 @@ const required = value => {
 export default function(props) {
   const navigation = useNavigate();
 
-  return <Login {...props} navigation={navigation} />;
+  return <LogIn {...props} navigation={navigation} />;
 }

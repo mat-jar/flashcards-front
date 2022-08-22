@@ -96,7 +96,7 @@ axios
   render() {
     return (
       <div>
-        <div className="flashcardContainer">
+        <div className="newFlashcardForm">
           <input
             className="newFlashcard"
             type="string"

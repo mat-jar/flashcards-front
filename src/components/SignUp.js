@@ -4,6 +4,7 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
 import AuthService from "../services/AuthService";
+import { useNavigate} from "react-router-dom";
 const required = value => {
   if (!value) {
     return (
@@ -32,15 +33,13 @@ const vpassword = value => {
     );
   }
 };
-export default class Register extends Component {
+class SignUp extends Component {
   constructor(props) {
     super(props);
     this.handleRegister = this.handleRegister.bind(this);
-
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
     this.state = {
-
       email: "",
       password: "",
       successful: false,
@@ -53,12 +52,15 @@ export default class Register extends Component {
       email: e.target.value
     });
   }
+
   onChangePassword(e) {
     this.setState({
       password: e.target.value
     });
   }
+
   handleRegister(e) {
+    const {navigation} = this.props;
     e.preventDefault();
     this.setState({
       message: "",
@@ -66,16 +68,17 @@ export default class Register extends Component {
     });
     this.form.validateAll();
     if (this.checkBtn.context._errors.length === 0) {
-      AuthService.register(
-
-        this.state.email,
-        this.state.password
-      ).then(
+      AuthService.register(this.state.email, this.state.password).then(
         response => {
           this.setState({
             message: response.data.message,
             successful: true
           });
+          const timer = setTimeout(() => {
+            navigation("/login")
+          }, 1000);
+          return () => clearTimeout(timer);
+          ;
         },
         error => {
           const resMessage =
@@ -128,7 +131,7 @@ export default class Register extends Component {
                   />
                 </div>
                 <div className="form-group">
-                  <button className="btn btn-primary btn-block">Sign Up</button>
+                  <button className="btn btn-primary btn-block">Sign up</button>
                 </div>
               </div>
             )}
@@ -157,4 +160,9 @@ export default class Register extends Component {
       </div>
     );
   }
+}
+export default function(props) {
+  const navigation = useNavigate();
+
+  return <SignUp {...props} navigation={navigation} />;
 }

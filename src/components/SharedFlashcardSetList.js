@@ -3,34 +3,59 @@ import axios from "axios";
 import update from "immutability-helper";
 import {  Link } from "react-router-dom";
 import AuthService from "../services/AuthService";
+const API_URL = 'http://localhost:3000/api/v1/flashcard_sets';
 
 class FlashcardSetList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      flashcard_sets: [],
+      user_flashcard_sets: [],
+      shared_flashcard_sets: [],
+      accessible_flashcard_sets: [],
       currentUser: undefined,
       userRole: undefined,
     };
   }
 
-  loadFlashcardSets() {
+  loadUserFlashcardSets() {
     axios
-      .get("/api/v1/flashcard_sets")
+      .get(API_URL)
       .then((response) => {
-        this.setState({ flashcard_sets: response.data });
+        this.setState({ user_flashcard_sets: response.data });
+      })
+      .catch((error) => console.log(error));
+  }
+
+  loadSharedFlashcardSets() {
+    axios
+      .post(API_URL + `/show_shared`)
+      .then((response) => {
+        this.setState({ shared_flashcard_sets: response.data });
+      })
+      .catch((error) => console.log(error));
+  }
+
+  loadAccessibleFlashcardSets() {
+    axios
+      .post(API_URL + `/show_accessible`)
+      .then((response) => {
+        this.setState({ accessible_flashcard_sets: response.data });
       })
       .catch((error) => console.log(error));
   }
 
   componentDidMount() {
-    this.loadFlashcardSets();
+    this.loadSharedFlashcardSets();
     const user = AuthService.getCurrentUser();
     if (user) {
       this.setState({
         currentUser: user,
         userRole: user.role,
       });
+      this.loadUserFlashcardSets();
+    }
+    if (user.role == "teacher" || user.role == "admin") {
+      this.loadAccessibleFlashcardSets();
     }
   }
 
@@ -40,7 +65,7 @@ class FlashcardSetList extends Component {
 
   modifyFlashcardSet = (e, id) => {
   axios
-    .put(`/api/v1/flashcard_sets/${id}`, { flashcard_set: { read: e.target.checked } })
+    .put(API_URL + `/${id}`, { flashcard_set: { read: e.target.checked } })
     .then((response) => {
       const flashcard_setIndex = this.state.flashcard_sets.findIndex(
         (x) => x.id === response.data.id
@@ -56,7 +81,7 @@ class FlashcardSetList extends Component {
 };
 removeFlashcardSet = (id) => {
 axios
-  .delete(`/api/v1/flashcard_sets/${id}`)
+  .delete(API_URL + `/${id}`)
   .then((response) => {
     const flashcard_setIndex = this.state.flashcard_sets.findIndex((x) => x.id === id);
     const flashcard_sets = update(this.state.flashcard_sets, {
@@ -72,7 +97,7 @@ axios
   newFlashcardSet= (e) => {
   if (e.key === "Enter" && !(e.target.value === "")) {
     axios
-      .post("/api/v1/flashcard_sets", { flashcard_set: { title: e.target.value } })
+      .post(API_URL, { flashcard_set: { title: e.target.value } })
       .then((response) => {
         const flashcard_sets = update(this.state.flashcard_sets, {
           $splice: [[0, 0, response.data]],

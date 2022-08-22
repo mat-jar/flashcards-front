@@ -1,6 +1,8 @@
 import axios from "axios";
+import authHeader from './authHeader';
 const API_URL = "http://localhost:3000/api/v1/users";
 class AuthService {
+
   login(email, password) {
     return axios
       .post(API_URL + "/sign_in", { user:
@@ -10,25 +12,41 @@ class AuthService {
       }
       })
       .then(response => {
-        //if (response.data.auth_token) {
-        //localStorage.setItem("header_obj", response.headers.authorization);
-        //localStorage.setItem("header-data1", response.data.auth_token);
-        localStorage.setItem("user", JSON.stringify(response.data));
-        //}
-        //return response.data;
+        if (response.headers.authorization) {
+          localStorage.setItem("token", response.headers.authorization);
+          localStorage.setItem("user", JSON.stringify(response.data.user));
+        }
+        return response;
       });
   }
   logout() {
-    localStorage.removeItem("user");
+    return axios
+      .delete(API_URL + "/sign_out", { headers: authHeader() })
+      .then(response => {
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        return response;
+      },
+          error => {
+            localStorage.removeItem("user");
+            localStorage.removeItem("token");
+            return error;
+          });
+
   }
   register(email, password) {
-    return axios.post(API_URL, { user:
-      {
-      email,
-      password,
-    }
+    return axios
+      .post(API_URL, { user:
+        {
+        email,
+        password
+      }
+    })
+    .then(response => {
+      return response;
     });
   }
+
   getCurrentUser() {
     return JSON.parse(localStorage.getItem('user'));;
   }
