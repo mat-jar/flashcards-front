@@ -4,10 +4,8 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
 import AuthService from "../services/AuthService";
-<<<<<<< HEAD:src/components/Register.js
-=======
 import { useNavigate} from "react-router-dom";
->>>>>>> feature/flashcards:src/components/SignUp.js
+
 const required = value => {
   if (!value) {
     return (

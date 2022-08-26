@@ -7,28 +7,16 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./components/Home";
 
-<<<<<<< HEAD
-import Login from "./components/Login";
-import Register from "./components/Register";
-import Home from "./components/Home";
-import Profile from "./components/Profile";
-import BoardStudent from "./components/BoardStudent";
-import BoardTeacher from "./components/BoardTeacher";
-import BoardAdmin from "./components/BoardAdmin";
-import Car from "./components/Car";
-=======
 import FlashcardSet from "./components/FlashcardSet";
-import FlashcardSet1 from "./components/FlashcardSet1";
+
 
 import LogIn from "./components/LogIn";
 import SignUp from "./components/SignUp";
 
 import ProfileSettings from "./components/ProfileSettings";
-import BoardStudent from "./components/BoardStudent";
-import BoardTeacher from "./components/BoardTeacher";
-import BoardAdmin from "./components/BoardAdmin";
+
 import AuthService from "./services/AuthService";
->>>>>>> feature/flashcards
+
 
 class App extends Component {
 
@@ -86,7 +74,7 @@ class App extends Component {
                                   />} />
 
             <Route path='/flashcard_sets/:id' element={<FlashcardSet/>} />
-            <Route path='/flashcard_sets1/:id' element={<FlashcardSet1/>} />
+
 
             <Route path="*" element={<NoMatch />} />
             <Route exact path="/login" element={<LogIn
@@ -97,9 +85,7 @@ class App extends Component {
             <Route exact path="/profilesettings" element={<ProfileSettings
                          currentUser={currentUser}
                          />} />
-            <Route path="/student" element={<BoardStudent/>} />
-            <Route path="/teacher" element={<BoardTeacher/>} />
-            <Route path="/admin" element={<BoardAdmin/>} />
+
           </Routes>
           </div>
         </div>

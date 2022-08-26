@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-  "name": "flashcard_front",
-=======
   "name": "flashcards_front",
->>>>>>> feature/flashcards
   "version": "0.1.0",
   "private": true,
   "proxy": "http://localhost:3000",

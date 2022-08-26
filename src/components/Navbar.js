@@ -1,14 +1,8 @@
 import React, { Component } from "react";
 import {  Link } from "react-router-dom";
-<<<<<<< HEAD
-import Login from "./Login";
-import Register from "./Register";
-import AuthService from "../services/AuthService";
-=======
 import AuthService from "../services/AuthService";
 import { useNavigate} from "react-router-dom";
 
->>>>>>> feature/flashcards
 class Navbar extends Component {
 
   constructor(props) {
