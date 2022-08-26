@@ -25,6 +25,7 @@ class AuthService {
       .then(response => {
         localStorage.removeItem("user");
         localStorage.removeItem("token");
+
         return response;
       },
           error => {

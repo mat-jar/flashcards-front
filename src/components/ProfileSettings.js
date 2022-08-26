@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 
 export default class ProfileSettings extends Component {
-  constructor(props) {
-    super(props);
-  }
+  
   render() {
     const currentUser = this.props.currentUser;
     return (

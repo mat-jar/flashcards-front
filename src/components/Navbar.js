@@ -1,17 +1,48 @@
 import React, { Component } from "react";
 import {  Link } from "react-router-dom";
 import AuthService from "../services/AuthService";
+import { useNavigate} from "react-router-dom";
+
 class Navbar extends Component {
 
   constructor(props) {
       super(props);
       this.logOut = this.logOut.bind(this);
+      this.state = {
+        successful: false,
+        message: ""
+      };
     }
 
 
-    logOut() {
-      AuthService.logout();
-      this.props.setUser()
+    logOut(e) {
+      const {navigation} = this.props;
+      e.preventDefault();
+      AuthService.logout().then(
+        response => {
+          this.setState({
+            message: response.data.message,
+            successful: true
+          });
+          this.props.setUser()
+          const timer = setTimeout(() => {
+            navigation("/")
+          }, 1000);
+          return () => clearTimeout(timer);
+          ;
+        },
+        error => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+          this.setState({
+            message: resMessage
+          });
+        }
+      );
     }
 
   render() {
@@ -27,16 +58,16 @@ class Navbar extends Component {
     </li>
   </ul>
 
-  <ul className="navbar-nav ms-5">
-  <form className="row row-cols-lg-auto g-3 align-items-center">
-  <li className="nav-item">
-    <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"></input>
-  </li>
-  <li className="nav-item">
-    <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-  </li>
+
+
+  <form className="mx-1 my-auto d-inline w-43">
+  <div className="input-group">
+    <input className="form-control mr-sm-2" type="search" placeholder="Look up a title, a category or any words in description" aria-label="Search"></input>
+
+    <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search flashard sets</button>
+  </div>
   </form>
-  </ul>
+
 
     { currentUser ? (
 
@@ -90,4 +121,9 @@ class Navbar extends Component {
   );
 }
 }
-export default Navbar;
+
+export default function NavbarWrapper(props) {
+  const navigation = useNavigate();
+
+  return <Navbar {...props} navigation={navigation} />;
+}

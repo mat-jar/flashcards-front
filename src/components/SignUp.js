@@ -97,8 +97,10 @@ class SignUp extends Component {
   }
   render() {
     return (
-      <div className="col-md-12">
-        <div className="card card-container">
+      <div className="row justify-content-md-center">
+      <div className="col-xl p-2">
+        <div className="card card-container p-2 my-3">
+
           <Form
             onSubmit={this.handleRegister}
             ref={c => {
@@ -131,7 +133,7 @@ class SignUp extends Component {
                   />
                 </div>
                 <div className="form-group">
-                  <button className="btn btn-primary btn-block">Sign up</button>
+                  <button className="btn btn-primary btn-block my-3">Sign up</button>
                 </div>
               </div>
             )}
@@ -158,10 +160,11 @@ class SignUp extends Component {
           </Form>
         </div>
       </div>
+    </div>
     );
   }
 }
-export default function(props) {
+export default function SignInWrapper(props) {
   const navigation = useNavigate();
 
   return <SignUp {...props} navigation={navigation} />;

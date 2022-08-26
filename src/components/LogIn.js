@@ -4,6 +4,7 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import AuthService from "../services/AuthService";
 import { useNavigate} from "react-router-dom";
+
 const required = value => {
   if (!value) {
     return (
@@ -43,7 +44,7 @@ const required = value => {
 
   handleLogin(e) {
     const {navigation} = this.props;
-    var t;
+    const source = this.props.source;
     e.preventDefault();
     this.setState({
       message: "",
@@ -58,12 +59,14 @@ const required = value => {
             message: response.data.message,
             successful: true
           });
-          this.props.setUser()
+          this.props.setUser();
+          if (source === "navbar") {
           const timer = setTimeout(() => {
             navigation("/dashboard")
           }, 1000);
           return () => clearTimeout(timer);
-          ;
+          }
+
         },
         error => {
           const resMessage =
@@ -87,8 +90,10 @@ const required = value => {
   render() {
 
     return (
-      <div className="col-md-12">
-        <div className="card card-container">
+
+      <div className="row justify-content-md-center">
+      <div className="col-xl p-2">
+        <div className="card card-container p-2 my-3">
           <Form
             onSubmit={this.handleLogin}
             ref={c => {
@@ -121,7 +126,7 @@ const required = value => {
             </div>
             <div className="form-group">
               <button
-                className="btn btn-primary btn-block"
+                className="btn btn-primary btn-block my-3"
                 disabled={this.state.loading}
               >
                 {this.state.loading && (
@@ -155,10 +160,11 @@ const required = value => {
           </Form>
         </div>
       </div>
+      </div>
     );
   }
 }
-export default function(props) {
+export default function LogInWrapper(props) {
   const navigation = useNavigate();
 
   return <LogIn {...props} navigation={navigation} />;

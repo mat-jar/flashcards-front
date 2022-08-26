@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 //import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./custom.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import About from "./pages/About";
-import UserFlashcardSetList from "./components/UserFlashcardSetList";
+import Footer from "./components/Footer";
+import Home from "./components/Home";
+
 import FlashcardSet from "./components/FlashcardSet";
 import FlashcardSet1 from "./components/FlashcardSet1";
 
@@ -15,7 +17,6 @@ import ProfileSettings from "./components/ProfileSettings";
 import BoardStudent from "./components/BoardStudent";
 import BoardTeacher from "./components/BoardTeacher";
 import BoardAdmin from "./components/BoardAdmin";
-import Car from "./components/Car";
 import AuthService from "./services/AuthService";
 
 class App extends Component {
@@ -62,21 +63,24 @@ class App extends Component {
         setUser={() => this.setUser()}
          />
       </div>
-      <div className="mainContainer">
+      <div className="container ">
 
         <div className="topHeading">
-          <h1>Articles App</h1>
+          <h1 className="display-6 text-center my-4">Study languages with flashcards</h1>
           <div className="pageContent">
           <Routes>
-            <Route index element={<About/>} />
-            <Route path='/user_flashcard_set_list' element={<UserFlashcardSetList/>} />
-            <Route path='/articles/:id' element={<Car/>} />
+            <Route index element={<Home
+                                  currentUser={currentUser}
+                                  setUser={() => this.setUser()}
+                                  />} />
+
             <Route path='/flashcard_sets/:id' element={<FlashcardSet/>} />
             <Route path='/flashcard_sets1/:id' element={<FlashcardSet1/>} />
-            <Route path='/about' element={<About/>} />
+
             <Route path="*" element={<NoMatch />} />
             <Route exact path="/login" element={<LogIn
                         setUser={() => this.setUser()}
+                        source="navbar"
                          />} />
             <Route exact path="/signup" element={<SignUp/>} />
             <Route exact path="/profilesettings" element={<ProfileSettings
@@ -90,10 +94,12 @@ class App extends Component {
         </div>
 
       </div>
-      <div className="content">
-      <Car/>
+
+      <div>
+      <Footer/>
       </div>
       </Router>
+
     );
   }
 }

@@ -9,11 +9,7 @@ class FlashcardSetList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user_flashcard_sets: [],
-      shared_flashcard_sets: [],
-      accessible_flashcard_sets: [],
-      currentUser: undefined,
-      userRole: undefined,
+      flashcard_sets: []
     };
   }
 
@@ -21,7 +17,7 @@ class FlashcardSetList extends Component {
     axios
       .get(API_URL)
       .then((response) => {
-        this.setState({ user_flashcard_sets: response.data });
+        this.setState({ flashcard_sets: response.data });
       })
       .catch((error) => console.log(error));
   }
@@ -30,7 +26,7 @@ class FlashcardSetList extends Component {
     axios
       .post(API_URL + `/show_shared`)
       .then((response) => {
-        this.setState({ shared_flashcard_sets: response.data });
+        this.setState({ flashcard_sets: response.data });
       })
       .catch((error) => console.log(error));
   }
@@ -39,23 +35,16 @@ class FlashcardSetList extends Component {
     axios
       .post(API_URL + `/show_accessible`)
       .then((response) => {
-        this.setState({ accessible_flashcard_sets: response.data });
+        this.setState({ flashcard_sets: response.data });
       })
       .catch((error) => console.log(error));
   }
 
   componentDidMount() {
-    this.loadSharedFlashcardSets();
-    const user = AuthService.getCurrentUser();
-    if (user) {
-      this.setState({
-        currentUser: user,
-        userRole: user.role,
-      });
-      this.loadUserFlashcardSets();
-    }
-    if (user.role == "teacher" || user.role == "admin") {
-      this.loadAccessibleFlashcardSets();
+    const currentUser = this.props.currentUser;
+    const listMode = this.props.listMode;
+    if (listMode === "shared") {
+      this.loadSharedFlashcardSets();
     }
   }
 
@@ -113,45 +102,17 @@ axios
 };
 
   render() {
-    const { currentUser, userRole } = this.state;
+    const currentUser = this.props.currentUser;
     return (
       <div>
-       {currentUser ? (
-        <div className="newFlashcardSetForm">
-          <input
-            className="newFlashcardSet"
-            type="string"
-            placeholder="Input a FlashcardSet and Press Enter"
-            maxLength="75"
-            onKeyPress={this.newFlashcardSet}
-            value={this.state.inputValue}
-            onChange={this.handleChange}
-          />
-        </div>
-      ) : (
-        <h2>Log in to add new Flashcard Set</h2>
-      )}
         <div className="wrapItems">
-          <ul className="listItems">
+          <ul className="list-group">
             {this.state.flashcard_sets.map((flashcard_set) => {
               return (
-                <li className="item" flashcard_set={flashcard_set} key={flashcard_set.id}>
-                <input className="itemCheckbox" type="checkbox"
-                checked={flashcard_set.read}
-                onChange={(e) => this.modifyFlashcardSet(e, flashcard_set.id)} />
+                <li className="list-group-item" flashcard_set={flashcard_set} key={flashcard_set.id}>
                   <Link to={`/flashcard_sets/${flashcard_set.id}`}>
                   <label className="itemDisplay">{flashcard_set.title}</label>
                   </Link>
-                  <span className="removeItemButton"
-                  onClick={(e) =>
-                  {if (window.confirm("Delete the flashcard set")) {
-                  this.removeFlashcardSet(flashcard_set.id);
-                  }
-                  }
-                  }
-                  >
-                  x
-                  </span>
                 </li>
               );
             })}
