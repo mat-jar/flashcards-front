@@ -4,6 +4,7 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import AuthService from "../services/AuthService";
 import { useNavigate} from "react-router-dom";
+
 const required = value => {
   if (!value) {
     return (
@@ -16,7 +17,7 @@ const required = value => {
 
 
 
- class Login extends Component {
+ class LogIn extends Component {
   constructor(props) {
     super(props);
     this.handleLogin = this.handleLogin.bind(this);
@@ -26,6 +27,7 @@ const required = value => {
       email: "",
       password: "",
       loading: false,
+      successful: false,
       message: ""
     };
   }
@@ -40,24 +42,31 @@ const required = value => {
     });
   }
 
-
-
-
   handleLogin(e) {
     const {navigation} = this.props;
+    const source = this.props.source;
     e.preventDefault();
     this.setState({
       message: "",
-      loading: true
+      loading: true,
+      successful: false
     });
     this.form.validateAll();
     if (this.checkBtn.context._errors.length === 0) {
       AuthService.login(this.state.email, this.state.password).then(
-        data => {
+        response => {
           this.setState({
-            message: data.message,
+            message: response.data.message,
+            successful: true
           });
-          //navigation("/about");
+          this.props.setUser();
+          if (source === "navbar") {
+          const timer = setTimeout(() => {
+            navigation("/dashboard")
+          }, 1000);
+          return () => clearTimeout(timer);
+          }
+
         },
         error => {
           const resMessage =
@@ -81,14 +90,18 @@ const required = value => {
   render() {
 
     return (
-      <div className="col-md-12">
-        <div className="card card-container">
+
+      <div className="row justify-content-md-center">
+      <div className="col-xl p-2">
+        <div className="card card-container p-2 my-3">
           <Form
             onSubmit={this.handleLogin}
             ref={c => {
               this.form = c;
             }}
           >
+          {!this.state.successful && (
+            <div>
             <div className="form-group">
               <label htmlFor="email">Email</label>
               <Input
@@ -113,18 +126,27 @@ const required = value => {
             </div>
             <div className="form-group">
               <button
-                className="btn btn-primary btn-block"
+                className="btn btn-primary btn-block my-3"
                 disabled={this.state.loading}
               >
                 {this.state.loading && (
                   <span className="spinner-border spinner-border-sm"></span>
                 )}
-                <span>Login</span>
+                <span>Log in</span>
               </button>
             </div>
+            </div>
+          )}
             {this.state.message && (
               <div className="form-group">
-                <div className="alert alert-danger" role="alert">
+                <div
+                  className={
+                    this.state.successful
+                      ? "alert alert-success"
+                      : "alert alert-danger"
+                  }
+                  role="alert"
+                >
                   {this.state.message}
                 </div>
               </div>
@@ -138,11 +160,12 @@ const required = value => {
           </Form>
         </div>
       </div>
+      </div>
     );
   }
 }
-export default function(props) {
+export default function LogInWrapper(props) {
   const navigation = useNavigate();
 
-  return <Login {...props} navigation={navigation} />;
+  return <LogIn {...props} navigation={navigation} />;
 }

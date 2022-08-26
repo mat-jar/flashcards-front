@@ -1,75 +1,135 @@
 import React, { Component } from "react";
 import {  Link } from "react-router-dom";
+<<<<<<< HEAD
 import Login from "./Login";
 import Register from "./Register";
 import AuthService from "../services/AuthService";
+=======
+import AuthService from "../services/AuthService";
+import { useNavigate} from "react-router-dom";
+
+>>>>>>> feature/flashcards
 class Navbar extends Component {
 
   constructor(props) {
       super(props);
       this.logOut = this.logOut.bind(this);
       this.state = {
-        currentUser: undefined,
-        userRole: undefined,
+        successful: false,
+        message: ""
       };
     }
-    componentDidMount() {
-      const user = AuthService.getCurrentUser();
-      if (user) {
-        this.setState({
-          currentUser: user,
-          userRole: user.role,
-        });
-      }
-    }
-    logOut() {
-      AuthService.logout();
+
+
+    logOut(e) {
+      const {navigation} = this.props;
+      e.preventDefault();
+      AuthService.logout().then(
+        response => {
+          this.setState({
+            message: response.data.message,
+            successful: true
+          });
+          this.props.setUser()
+          const timer = setTimeout(() => {
+            navigation("/")
+          }, 1000);
+          return () => clearTimeout(timer);
+          ;
+        },
+        error => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+          this.setState({
+            message: resMessage
+          });
+        }
+      );
     }
 
   render() {
-  const { currentUser, userRole } = this.state;
+  const currentUser = this.props.currentUser;
   return (
   <div>
-  <div>
-    <li>
-    <Link to="/">Home</Link>
+  <nav className="navbar navbar-expand navbar-dark bg-dark">
+  <ul className="navbar-nav me-5 ms-5">
+    <li className="nav-item">
+        <Link to="/" className="nav-link">
+        Home
+        </Link>
     </li>
-    <li>
-      <Link to="/articles">Articles</Link>
-    </li>
-    <li>
-      <Link to="/about">About</Link>
-    </li>
+  </ul>
+
+
+
+  <form className="mx-1 my-auto d-inline w-43">
+  <div className="input-group">
+    <input className="form-control mr-sm-2" type="search" placeholder="Look up a title, a category or any words in description" aria-label="Search"></input>
+
+    <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search flashard sets</button>
   </div>
-  { currentUser ? (
-            <div className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <Link to={"/profile"} className="nav-link">
-                  {currentUser.username}
-                </Link>
-              </li>
-              <li className="nav-item">
-                <a href="/login" className="nav-link" onClick={this.logOut}>
-                  LogOut
-                </a>
-              </li>
-            </div>
-          ) : (
-            <div className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <Link to={"/login"} className="nav-link">
-                  Login
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link to={"/register"} className="nav-link">
-                  Sign Up
-                </Link>
-              </li>
-            </div>
-          )}
-    </div>
+  </form>
+
+
+    { currentUser ? (
+
+    <ul className="navbar-nav ms-auto me-5">
+
+
+    {currentUser.name ? (
+    <span className="navbar-text">Hello, {currentUser.name}!</span>
+    ) : (
+    <span className="navbar-text">Hello, Anonymus!</span>
+    )}
+
+
+    <li className="nav-item">
+      <Link to={"/dashboard"} className="nav-link">
+        Your flashcards dashboard
+      </Link>
+    </li>
+
+    <li className="nav-item">
+      <Link to={"/profilesettings"} className="nav-link">
+        Your profile settings
+      </Link>
+    </li>
+
+    <li className="nav-item">
+      <a href="/" className="nav-link" onClick={this.logOut}>
+        Log out
+      </a>
+    </li>
+
+    </ul>
+
+  ):(
+    <ul className="navbar-nav ms-auto me-5">
+    <li className="nav-item">
+      <Link to={"/login"} className="nav-link">
+        Log in
+      </Link>
+    </li>
+
+    <li className="nav-item">
+      <Link to={"/signup"} className="nav-link">
+        Sign up
+      </Link>
+    </li>
+    </ul>
+  )}
+ </nav>
+  </div>
   );
 }
 }
-export default Navbar;
+
+export default function NavbarWrapper(props) {
+  const navigation = useNavigate();
+
+  return <Navbar {...props} navigation={navigation} />;
+}

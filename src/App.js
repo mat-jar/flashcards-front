@@ -1,11 +1,13 @@
 import React, { Component } from "react";
-import "./App.css";
+//import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./custom.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Articles from "./pages/Articles";
-import About from "./pages/About";
-import ArticlesContainer from "./components/ArticlesContainer";
+import Footer from "./components/Footer";
+import Home from "./components/Home";
 
+<<<<<<< HEAD
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Home from "./components/Home";
@@ -14,31 +16,87 @@ import BoardStudent from "./components/BoardStudent";
 import BoardTeacher from "./components/BoardTeacher";
 import BoardAdmin from "./components/BoardAdmin";
 import Car from "./components/Car";
+=======
+import FlashcardSet from "./components/FlashcardSet";
+import FlashcardSet1 from "./components/FlashcardSet1";
+
+import LogIn from "./components/LogIn";
+import SignUp from "./components/SignUp";
+
+import ProfileSettings from "./components/ProfileSettings";
+import BoardStudent from "./components/BoardStudent";
+import BoardTeacher from "./components/BoardTeacher";
+import BoardAdmin from "./components/BoardAdmin";
+import AuthService from "./services/AuthService";
+>>>>>>> feature/flashcards
 
 class App extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentUser: undefined
+    };
+  }
+
+  componentDidMount() {
+    const user = AuthService.getCurrentUser();
+    if (user) {
+      this.setState({
+        currentUser: user
+      });
+    }
+  }
+
+  setUser() {
+    const user = AuthService.getCurrentUser();
+    if (user) {
+      this.setState({
+        currentUser: user
+      });
+    }
+    else {
+      this.setState({
+        currentUser: undefined
+      });
+    }
+  }
+
 
   render() {
+    const { currentUser } = this.state;
     return (
       <Router>
       <div className="header">
-        <div className="navbar">
-        <Navbar />
-        </div>
+
+        <Navbar
+        currentUser={currentUser}
+        setUser={() => this.setUser()}
+         />
       </div>
-      <div className="mainContainer">
+      <div className="container ">
 
         <div className="topHeading">
-          <h1>Articles App</h1>
+          <h1 className="display-6 text-center my-4">Study languages with flashcards</h1>
           <div className="pageContent">
           <Routes>
-            <Route index element={<Articles/>} />
-            <Route path='/articles' element={<Articles/>} />
-            <Route path='/about' element={<About/>} />
+            <Route index element={<Home
+                                  currentUser={currentUser}
+                                  setUser={() => this.setUser()}
+                                  />} />
+
+            <Route path='/flashcard_sets/:id' element={<FlashcardSet/>} />
+            <Route path='/flashcard_sets1/:id' element={<FlashcardSet1/>} />
+
             <Route path="*" element={<NoMatch />} />
-            <Route exact path="/login" element={<Login/>} />
-            <Route exact path="/register" element={<Register/>} />
-            <Route exact path="/profile" element={<Profile/>} />
+            <Route exact path="/login" element={<LogIn
+                        setUser={() => this.setUser()}
+                        source="navbar"
+                         />} />
+            <Route exact path="/signup" element={<SignUp/>} />
+            <Route exact path="/profilesettings" element={<ProfileSettings
+                         currentUser={currentUser}
+                         />} />
             <Route path="/student" element={<BoardStudent/>} />
             <Route path="/teacher" element={<BoardTeacher/>} />
             <Route path="/admin" element={<BoardAdmin/>} />
@@ -47,10 +105,12 @@ class App extends Component {
         </div>
 
       </div>
-      <div className="content">
-      <Car/>
+
+      <div>
+      <Footer/>
       </div>
       </Router>
+
     );
   }
 }

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import {  Link } from "react-router-dom";
 import axios from "axios";
 import update from "immutability-helper";
 
@@ -98,7 +99,9 @@ axios
                 <input className="itemCheckbox" type="checkbox"
                 checked={article.read}
                 onChange={(e) => this.modifyArticle(e, article.id)} />
+                  <Link to={`/articles/${article.id}`}>
                   <label className="itemDisplay">{article.title}</label>
+                  </Link>
                   <span className="removeItemButton"
                   onClick={(e) =>
                   {if (window.confirm("Delete the article")) {

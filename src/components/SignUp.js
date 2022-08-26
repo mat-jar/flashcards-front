@@ -4,6 +4,10 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
 import AuthService from "../services/AuthService";
+<<<<<<< HEAD:src/components/Register.js
+=======
+import { useNavigate} from "react-router-dom";
+>>>>>>> feature/flashcards:src/components/SignUp.js
 const required = value => {
   if (!value) {
     return (
@@ -32,15 +36,13 @@ const vpassword = value => {
     );
   }
 };
-export default class Register extends Component {
+class SignUp extends Component {
   constructor(props) {
     super(props);
     this.handleRegister = this.handleRegister.bind(this);
-
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
     this.state = {
-
       email: "",
       password: "",
       successful: false,
@@ -53,12 +55,15 @@ export default class Register extends Component {
       email: e.target.value
     });
   }
+
   onChangePassword(e) {
     this.setState({
       password: e.target.value
     });
   }
+
   handleRegister(e) {
+    const {navigation} = this.props;
     e.preventDefault();
     this.setState({
       message: "",
@@ -66,16 +71,17 @@ export default class Register extends Component {
     });
     this.form.validateAll();
     if (this.checkBtn.context._errors.length === 0) {
-      AuthService.register(
-
-        this.state.email,
-        this.state.password
-      ).then(
+      AuthService.register(this.state.email, this.state.password).then(
         response => {
           this.setState({
             message: response.data.message,
             successful: true
           });
+          const timer = setTimeout(() => {
+            navigation("/login")
+          }, 1000);
+          return () => clearTimeout(timer);
+          ;
         },
         error => {
           const resMessage =
@@ -94,8 +100,10 @@ export default class Register extends Component {
   }
   render() {
     return (
-      <div className="col-md-12">
-        <div className="card card-container">
+      <div className="row justify-content-md-center">
+      <div className="col-xl p-2">
+        <div className="card card-container p-2 my-3">
+
           <Form
             onSubmit={this.handleRegister}
             ref={c => {
@@ -128,7 +136,7 @@ export default class Register extends Component {
                   />
                 </div>
                 <div className="form-group">
-                  <button className="btn btn-primary btn-block">Sign Up</button>
+                  <button className="btn btn-primary btn-block my-3">Sign up</button>
                 </div>
               </div>
             )}
@@ -155,6 +163,12 @@ export default class Register extends Component {
           </Form>
         </div>
       </div>
+    </div>
     );
   }
+}
+export default function SignInWrapper(props) {
+  const navigation = useNavigate();
+
+  return <SignUp {...props} navigation={navigation} />;
 }
