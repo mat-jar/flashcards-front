@@ -16,7 +16,7 @@ import SignUp from "./components/SignUp";
 import ProfileSettings from "./components/ProfileSettings";
 
 import AuthService from "./services/AuthService";
-import runtimeEnv from '@mars/heroku-js-runtime-env'
+
 
 
 class App extends Component {
