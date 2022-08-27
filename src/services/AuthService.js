@@ -1,6 +1,8 @@
 import axios from "axios";
 import authHeader from './authHeader';
-const API_URL = "http://localhost:3000/api/v1/users";
+import runtimeEnv from '@mars/heroku-js-runtime-env'
+const API_URL = runtimeEnv().REACT_APP_API_URL + '/api/v1/users';
+
 class AuthService {
 
   login(email, password) {

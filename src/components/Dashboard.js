@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import axios from "axios";
 import update from "immutability-helper";
 import {  Link } from "react-router-dom";
 import AuthService from "../services/AuthService";
-const API_URL = 'http://localhost:3000/api/v1/flashcard_sets';
+
 
 class Dashboard extends Component {
   constructor(props) {
