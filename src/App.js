@@ -3,18 +3,17 @@ import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./custom.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./components/Home";
-
 import FlashcardSet from "./components/FlashcardSet";
-
-
+import Search from "./components/Search";
 import LogIn from "./components/LogIn";
 import SignUp from "./components/SignUp";
-
 import ProfileSettings from "./components/ProfileSettings";
-
 import AuthService from "./services/AuthService";
 
 
@@ -24,7 +23,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUser: undefined
+      currentUser: undefined,
+      searchPhrase: undefined
     };
   }
 
@@ -51,9 +51,19 @@ class App extends Component {
     }
   }
 
+  setSearchPhrase(phrase) {
+    this.setState({
+      searchPhrase: phrase
+    });
+  }
+
+  showToast(message) {
+    toast.success(message);
+  }
+
 
   render() {
-    const { currentUser } = this.state;
+    const { currentUser, searchPhrase } = this.state;
     return (
       <Router>
       <div className="header">
@@ -61,6 +71,8 @@ class App extends Component {
         <Navbar
         currentUser={currentUser}
         setUser={() => this.setUser()}
+        setSearchPhrase={phrase => this.setSearchPhrase(phrase)}
+        showToast={message => this.showToast(message)}
          />
       </div>
       <div className="container ">
@@ -75,7 +87,8 @@ class App extends Component {
                                   />} />
 
             <Route path='/flashcard_sets/:id' element={<FlashcardSet/>} />
-
+            <Route exact path="/search" element={<Search
+                          searchPhrase={searchPhrase}/>} />
 
             <Route path="*" element={<NoMatch />} />
             <Route exact path="/login" element={<LogIn
@@ -96,6 +109,7 @@ class App extends Component {
       <div>
       <Footer/>
       </div>
+      <ToastContainer pauseOnHover={false} autoClose={2000}/>
       </Router>
 
     );

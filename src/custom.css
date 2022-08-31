@@ -63,3 +63,12 @@
     border-bottom-right-radius: 2rem;
     border-top-right-radius: 2rem;
 }
+
+.flashcardset-list {
+  animation: 1s ease-in 0s 1 fade-in;
+}
+
+@keyframes fade-in {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}

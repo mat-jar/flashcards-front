@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
 import update from "immutability-helper";
+import runtimeEnv from '@mars/heroku-js-runtime-env'
+const API_URL = runtimeEnv().REACT_APP_API_URL + '/api/v1/flashcard_sets';
 
 
 
@@ -18,9 +20,10 @@ class FlashcardSet extends Component {
 
   loadFlashcards() {
     axios
-      .get(`/api/v1/flashcard_sets/${this.state.flashcard_set_id}/flashcards`)
+      .get(API_URL + `/${this.state.flashcard_set_id}/shared_flashcards`)
       .then((response) => {
-        this.setState({ flashcards: response.data });
+        this.setState({ flashcards: response.data.flashcards });
+        console.log(response.data.flashcards)
       })
       .catch((error) => console.log(error));
   }
@@ -46,7 +49,7 @@ class FlashcardSet extends Component {
 
   modifyFlashcard = (e, id) => {
   axios
-    .put(`/api/v1/flashcard_sets/${this.state.flashcard_set_id}/flashcards/${id}`, { flashcard: { read: e.target.checked } })
+    .put(API_URL + `/${this.state.flashcard_set_id}/flashcards/${id}`, { flashcard: { read: e.target.checked } })
     .then((response) => {
       const flashcardIndex = this.state.flashcards.findIndex(
         (x) => x.id === response.data.id

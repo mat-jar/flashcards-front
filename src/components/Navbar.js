@@ -8,12 +8,32 @@ class Navbar extends Component {
   constructor(props) {
       super(props);
       this.logOut = this.logOut.bind(this);
+      this.handleChange = this.handleChange.bind(this);
+      this.handleSubmit = this.handleSubmit.bind(this);
+      this.handleFocus = this.handleFocus.bind(this);
       this.state = {
         successful: false,
-        message: ""
+        message: "",
+        searchPhrase: ""
       };
     }
 
+    handleChange(event) {
+      this.setState({searchPhrase: event.target.value});
+    }
+
+    handleFocus(event) {
+      event.target.value = "";
+      this.setState({searchPhrase: event.target.value});
+    }
+
+    handleSubmit(event) {
+
+      const {navigation} = this.props;
+      this.props.setSearchPhrase(this.state.searchPhrase);
+      navigation("/search")
+      event.preventDefault();
+    }
 
     logOut(e) {
       const {navigation} = this.props;
@@ -23,7 +43,9 @@ class Navbar extends Component {
           this.setState({
             message: response.data.message,
             successful: true
-          });
+          }
+        );
+          this.props.showToast(response.data.message);
           this.props.setUser()
           const timer = setTimeout(() => {
             navigation("/")
@@ -38,11 +60,14 @@ class Navbar extends Component {
               error.response.data.message) ||
             error.message ||
             error.toString();
+          this.props.showToast(resMessage);
           this.setState({
             message: resMessage
           });
         }
       );
+
+
     }
 
   render() {
@@ -60,9 +85,9 @@ class Navbar extends Component {
 
 
 
-  <form className="mx-1 my-auto d-inline w-43">
+  <form className="mx-1 my-auto d-inline w-43" onSubmit={this.handleSubmit}>
   <div className="input-group">
-    <input className="form-control mr-sm-2" type="search" placeholder="Look up a title, a category or any words in description" aria-label="Search"></input>
+    <input className="form-control mr-sm-2" onFocus={this.handleFocus} type="text" placeholder="Look up a title, a category or any words in description" aria-label="Search" onChange={this.handleChange} ></input>
 
     <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search flashard sets</button>
   </div>

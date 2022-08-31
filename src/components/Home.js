@@ -12,7 +12,6 @@ export default function Home(props) {
   <div className="col-md-6 bg-primary p-4 rounded-left-1-5">
   <p className="display-9 text-center my-4">Choose any of the shared sets and start learning</p>
   <FlashcardSetList
-  setUser={() => props.setUser()}
   listMode="shared"
   />
   </div>

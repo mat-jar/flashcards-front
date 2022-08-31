@@ -4,13 +4,16 @@ import update from "immutability-helper";
 import {  Link } from "react-router-dom";
 import AuthService from "../services/AuthService";
 import runtimeEnv from '@mars/heroku-js-runtime-env'
+
+
 const API_URL = runtimeEnv().REACT_APP_API_URL + '/api/v1/flashcard_sets';
+
 
 class FlashcardSetList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      flashcard_sets: []
+      flashcard_sets: [],
     };
   }
 
@@ -23,9 +26,11 @@ class FlashcardSetList extends Component {
       .catch((error) => console.log(error));
   }
 
-  loadSharedFlashcardSets() {
+  loadSharedFlashcardSets(searchPhrase) {
+    const params = { flashcard_set: {search_phrase: searchPhrase}};
     axios
-      .post(API_URL + `/show_shared`)
+      .post(API_URL + `/show_shared`, (searchPhrase ? params : {})
+      )
       .then((response) => {
         this.setState({ flashcard_sets: response.data });
       })
@@ -45,7 +50,7 @@ class FlashcardSetList extends Component {
     const currentUser = this.props.currentUser;
     const listMode = this.props.listMode;
     if (listMode === "shared") {
-      this.loadSharedFlashcardSets();
+      this.loadSharedFlashcardSets(this.props.searchPhrase);
     }
   }
 
@@ -105,7 +110,8 @@ axios
   render() {
     const currentUser = this.props.currentUser;
     return (
-      <div>
+
+      <div className="flashcardset-list">
         <div className="wrapItems">
           <ul className="list-group">
             {this.state.flashcard_sets.map((flashcard_set) => {
@@ -120,6 +126,7 @@ axios
           </ul>
         </div>
       </div>
+
     );
   }
 }
