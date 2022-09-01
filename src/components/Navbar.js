@@ -28,7 +28,9 @@ class Navbar extends Component {
     }
 
     handleSubmit(event) {
-
+      if (event.key === 'Enter'){
+        event.target.blur();
+      }
       const {navigation} = this.props;
       this.props.setSearchPhrase(this.state.searchPhrase);
       navigation("/search")
