@@ -1,8 +1,8 @@
 {
   "name": "flashcards_front",
   "version": "0.1.0",
+  "proxy": "http://localhost:5000",
   "private": true,
-  "proxy": "http://localhost:3000",
   "dependencies": {
     "@mars/heroku-js-runtime-env": "^3.0.2",
     "angular": "^1.8.2",

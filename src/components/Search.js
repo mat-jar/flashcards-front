@@ -1,7 +1,5 @@
 import React, {useState, useEffect} from "react";
-
-
-import FlashcardSetList from "./FlashcardSetList";
+import FlashcardSetsList from "./FlashcardSetsList";
 
 export default function Search(props) {
   const searchPhrase = props.searchPhrase;
@@ -13,8 +11,8 @@ export default function Search(props) {
   <div className="row">
   <div className="col-md-6 bg-primary p-4 rounded-left-1-5">
   <p className="display-9 text-center my-4"> Search results for phrase "{searchPhrase}":</p>
-  
-  <FlashcardSetList
+
+  <FlashcardSetsList
   key = {searchPhrase}
   searchPhrase = {searchPhrase}
   listMode="shared"
