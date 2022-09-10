@@ -72,3 +72,7 @@
   from {opacity: 0;}
   to {opacity: 1;}
 }
+
+.table-hover tr:hover{
+filter: brightness(90%);
+}

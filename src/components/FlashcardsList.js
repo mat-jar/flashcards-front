@@ -100,60 +100,39 @@ axios
 
   render() {
     return (
-      <div>
-      <p className="display-9 text-center my-4">Choose any of the shared sets and start learning</p>
+      <div className="">
+
         <div className="wrapItems">
-          <ul className="listItems">
+          <table className="flashcardsTable table table-hover text-center table-borderless">
+          <thead>
+            <tr className="d-flex">
+              <th className="col-6">Front</th>
+              <th className="col-6">Back</th>
+            </tr>
+          </thead>
+          <tbody>
             {this.state.flashcards.map((flashcard) => {
               return (
-                <li className="item" flashcard={flashcard} key={flashcard.id}>
-
-
+                <tr className="item d-flex" flashcard={flashcard} key={flashcard.id}>
+                <td className="col-6">
+                  <div className="border p-4 bg-light div-hover">
                   <label className="itemDisplay">{flashcard.front_text} &nbsp;</label>
-
+                  </div>
+                </td>
+                <td className="col-6">
+                <div className="border p-4 bg-light div-hover">
                   <label className="itemDisplay">{flashcard.back_text} &nbsp;</label>
-
-                  <span className="removeItemButton"
-                  onClick={(e) =>
-                  {if (window.confirm("Delete the flashcard")) {
-                  this.removeFlashcard(flashcard.id);
-                  }
-                  }
-                  }
-                  >
-                  x &nbsp;
-                  </span>
-                  <input className="itemCheckbox" type="checkbox"
-                  checked={flashcard.read}
-                  onChange={(e) => this.modifyFlashcard(e, flashcard.id)} />
-                </li>
+                </div>
+                </td>
+                </tr>
               );
             })}
-          </ul>
+            </tbody>
+            </table>
+
         </div>
 
-        <div className="newFlashcardForm">
-          <input
-            className="newFlashcard"
-            type="string"
-            placeholder="Input a Flashcard and Press Enter"
-            maxLength="75"
-            onKeyPress={this.newFlashcard}
-            value={this.state.inputFrontText}
-            onChange={this.handleInputChange}
-            name="inputFrontText"
-          />
-          <input
-            className="newFlashcard"
-            type="string"
-            placeholder="Input a Flashcard and Press Enter"
-            maxLength="75"
-            onKeyPress={this.newFlashcard}
-            value={this.state.inputBackText}
-            onChange={this.handleInputChange}
-            name="inputBackText"
-          />
-        </div>
+
       </div>
     );
   }

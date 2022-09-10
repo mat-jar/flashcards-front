@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import axios from "axios";
 import update from "immutability-helper";
 import runtimeEnv from '@mars/heroku-js-runtime-env'
+import FlashcardsList from "./FlashcardsList";
+
 const API_URL = runtimeEnv().REACT_APP_API_URL + '/api/v1/flashcard_sets';
 
 
@@ -99,57 +101,17 @@ axios
 
   render() {
     return (
-      <div>
-        <div className="newFlashcardForm">
-          <input
-            className="newFlashcard"
-            type="string"
-            placeholder="Input a Flashcard and Press Enter"
-            maxLength="75"
-            onKeyPress={this.newFlashcard}
-            value={this.state.inputFrontText}
-            onChange={this.handleInputChange}
-            name="inputFrontText"
-          />
-          <input
-            className="newFlashcard"
-            type="string"
-            placeholder="Input a Flashcard and Press Enter"
-            maxLength="75"
-            onKeyPress={this.newFlashcard}
-            value={this.state.inputBackText}
-            onChange={this.handleInputChange}
-            name="inputBackText"
-          />
-        </div>
-        <div className="wrapItems">
-          <ul className="listItems">
-            {this.state.flashcards.map((flashcard) => {
-              return (
-                <li className="item" flashcard={flashcard} key={flashcard.id}>
-                <input className="itemCheckbox" type="checkbox"
-                checked={flashcard.read}
-                onChange={(e) => this.modifyFlashcard(e, flashcard.id)} />
-
-                  <label className="itemDisplay">{flashcard.front_text}</label>
-                  <label className="itemDisplay">{flashcard.back_text}</label>
-
-                  <span className="removeItemButton"
-                  onClick={(e) =>
-                  {if (window.confirm("Delete the flashcard")) {
-                  this.removeFlashcard(flashcard.id);
-                  }
-                  }
-                  }
-                  >
-                  x
-                  </span>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+      <div className="row">
+      <div className="col-md-6 bg-primary p-4 rounded-left-1-5">
+      <p className="display-9 text-center my-4">Flashcard set nr {this.state.flashcard_set_id}</p>
+      <FlashcardsList
+      listMode="shared"
+      />
       </div>
+      <div className="col-md-6 bg-secondary p-4 rounded-right-1-5">
+
+    </div>
+    </div>
     );
   }
 }
