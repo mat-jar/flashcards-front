@@ -9,13 +9,25 @@ export default function Home(props) {
 
 
   <div className="row">
-  <div className="col-md-6 bg-primary p-4 rounded-left-1-5">
+  <div className=
+  {window.matchMedia( "(max-width: 768px)" ).matches ? (
+    "col-md-6 bg-primary p-4"
+  ) : (
+    "col-md-6 bg-primary p-4 rounded-left-1-5"
+  )}
+  >
   <p className="display-9 text-center my-4">Choose any of the shared sets and start learning</p>
   <FlashcardSetsList
   listMode="shared"
   />
   </div>
-  <div className="col-md-6 bg-secondary p-4 rounded-right-1-5">
+  <div className=
+  {window.matchMedia( "(max-width: 768px)" ).matches ? (
+    "col-md-6 bg-secondary p-4"
+  ) : (
+    "col-md-6 bg-secondary p-4 rounded-right-1-5"
+  )}
+  >
   {currentUser ? (
     <div className="row h-100 flex-column">
     <p className="display-9 text-center my-4">Practise recently studied sets...</p>
