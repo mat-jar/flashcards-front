@@ -1,33 +1,24 @@
 import LogIn from "./LogIn";
 import SignUp from "./SignUp";
 import FlashcardSetsList from "./FlashcardSetsList";
+import {displayCorners} from '../Utils'
+
 
 export default function Home(props) {
 
   const currentUser = props.currentUser;
+  
   return(
 
 
   <div className="row">
-  <div className=
-  {window.matchMedia( "(max-width: 768px)" ).matches ? (
-    "col-md-6 bg-primary p-4"
-  ) : (
-    "col-md-6 bg-primary p-4 rounded-left-1-5"
-  )}
-  >
+  <div className={"col-md-6 bg-primary p-4 " + displayCorners("left")}>
   <p className="display-9 text-center my-4">Choose any of the shared sets and start learning</p>
   <FlashcardSetsList
   listMode="shared"
   />
   </div>
-  <div className=
-  {window.matchMedia( "(max-width: 768px)" ).matches ? (
-    "col-md-6 bg-secondary p-4"
-  ) : (
-    "col-md-6 bg-secondary p-4 rounded-right-1-5"
-  )}
-  >
+  <div className={"col-md-6 bg-secondary p-4 " + displayCorners("right")}>
   {currentUser ? (
     <div className="row h-100 flex-column">
     <p className="display-9 text-center my-4">Practise recently studied sets...</p>

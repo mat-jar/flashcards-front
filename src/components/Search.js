@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
 import FlashcardSetsList from "./FlashcardSetsList";
+import {displayCorners} from '../Utils'
 
 export default function Search(props) {
   const searchPhrase = props.searchPhrase;
@@ -9,7 +10,7 @@ export default function Search(props) {
 
 
   <div className="row">
-  <div className="col-md-6 bg-primary p-4 rounded-left-1-5">
+  <div className={"col-md-6 bg-primary p-4 " + displayCorners("left")}>
   <p className="display-9 text-center my-4"> Search results for phrase "{searchPhrase}":</p>
 
   <FlashcardSetsList
@@ -19,7 +20,7 @@ export default function Search(props) {
   />
 
   </div>
-  <div className="col-md-6 bg-secondary p-4 rounded-right-1-5">
+  <div className={"col-md-6 bg-secondary p-4 " + displayCorners("right")}>
 
 </div>
 </div>

@@ -3,6 +3,7 @@ import axios from "axios";
 import update from "immutability-helper";
 import runtimeEnv from '@mars/heroku-js-runtime-env'
 import FlashcardsList from "./FlashcardsList";
+import {displayCorners} from '../Utils'
 
 const API_URL = runtimeEnv().REACT_APP_API_URL + '/api/v1/flashcard_sets';
 
@@ -25,7 +26,6 @@ class FlashcardSet extends Component {
       .get(API_URL + `/${this.state.flashcard_set_id}/shared_flashcards`)
       .then((response) => {
         this.setState({ flashcards: response.data.flashcards });
-        console.log(response.data.flashcards)
       })
       .catch((error) => console.log(error));
   }
@@ -102,14 +102,13 @@ axios
   render() {
     return (
       <div className="row">
-      <div className="col-md-6 bg-primary p-4 rounded-left-1-5">
+      <div className={"col-md-6 bg-primary p-4 " + displayCorners("left")}>
       <p className="display-9 text-center my-4">Flashcard set nr {this.state.flashcard_set_id}</p>
       <FlashcardsList
       listMode="shared"
       />
       </div>
-      <div className="col-md-6 bg-secondary p-4 rounded-right-1-5">
-
+      <div className={"col-md-6 bg-secondary p-4 " + displayCorners("right")}>
     </div>
     </div>
     );
