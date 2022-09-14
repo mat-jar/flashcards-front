@@ -1,24 +1,31 @@
-import React, { Component } from "react";
+import React, { useEffect } from "react";
+import { Component } from "react";
 import axios from "axios";
 import update from "immutability-helper";
 import runtimeEnv from '@mars/heroku-js-runtime-env'
 import {useParams} from 'react-router-dom';
+import * as ReactDOM from 'react-dom';
+
+import FlashcardRowContainer from "./FlashcardRowContainer";
+
+
 const API_URL = runtimeEnv().REACT_APP_API_URL + '/api/v1/flashcard_sets';
-
-
-
 
 class FlashcardsList extends Component {
 
   constructor(props) {
     super(props);
+    this.label = React.createRef();
     this.state = {
       flashcards: [],
       inputFrontText: "",
       inputBackText: "",
       flashcard_set_id: this.props.params.id
     };
+
   }
+
+
 
   loadFlashcards() {
     axios
@@ -31,8 +38,8 @@ class FlashcardsList extends Component {
 
   componentDidMount() {
     this.loadFlashcards();
-  }
 
+  }
 
 
   handleInputChange = (e) => {
@@ -45,7 +52,6 @@ class FlashcardsList extends Component {
 
     [name]: value
     });
-//debugger;
   };
 
   modifyFlashcard = (e, id) => {
@@ -98,11 +104,13 @@ axios
   }
 };
 
+
   render() {
+
     return (
       <div className="">
 
-        <div className="wrapItems">
+        <div className="wrapItems" >
           <table className="flashcardsTable table table-hover text-center table-borderless">
           <thead>
             <tr className="d-flex">
@@ -110,24 +118,16 @@ axios
               <th className="col-6">Back</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody >
             {this.state.flashcards.map((flashcard) => {
               return (
-                <tr className="item d-flex" flashcard={flashcard} key={flashcard.id}>
-                <td className="col-6">
-                  <div className="border p-4 bg-light div-hover">
-                  <label className="itemDisplay">{flashcard.front_text} &nbsp;</label>
-                  </div>
-                </td>
-                <td className="col-6">
-                <div className="border p-4 bg-light div-hover">
-                  <label className="itemDisplay">{flashcard.back_text} &nbsp;</label>
-                </div>
-                </td>
+                <tr className="item d-flex" flashcard={flashcard} key={flashcard.id} >
+                <FlashcardRowContainer flashcard={flashcard} />
                 </tr>
               );
             })}
             </tbody>
+
             </table>
 
         </div>
@@ -135,11 +135,14 @@ axios
 
       </div>
     );
+
   }
 }
 
 export default function FlashcardsListWrapper(props) {
   const params = useParams();
 
-  return <FlashcardsList {...props} params={params} />;
+
+
+  return <FlashcardsList {...props} params={params}  />;
 }

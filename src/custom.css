@@ -76,3 +76,12 @@
 .table-hover tr:hover{
 filter: brightness(90%);
 }
+
+.centered {
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+.p-2rem {
+  padding: 2rem;
+}
