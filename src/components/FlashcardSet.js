@@ -4,6 +4,7 @@ import update from "immutability-helper";
 import runtimeEnv from '@mars/heroku-js-runtime-env'
 import FlashcardsList from "./FlashcardsList";
 import {displayCorners} from '../Utils'
+import FlashcardsMemorizeContainer from"./FlashcardsMemorizeContainer";
 
 const API_URL = runtimeEnv().REACT_APP_API_URL + '/api/v1/flashcard_sets';
 
@@ -15,8 +16,10 @@ class FlashcardSet extends Component {
     this.state = {
       flashcards: [],
       flashcard_set_id: window.location.pathname.split("/").slice(-1),
+      flashcard_set: [],
       inputFrontText: "",
-      inputBackText: ""
+      inputBackText: "",
+      mode: ""
 
     };
   }
@@ -25,7 +28,7 @@ class FlashcardSet extends Component {
     axios
       .get(API_URL + `/${this.state.flashcard_set_id}/shared_flashcards`)
       .then((response) => {
-        this.setState({ flashcards: response.data.flashcards });
+        this.setState({ flashcards: response.data.flashcards, flashcard_set: response.data.flashcard_set });
       })
       .catch((error) => console.log(error));
   }
@@ -46,7 +49,6 @@ class FlashcardSet extends Component {
 
     [name]: value
     });
-//debugger;
   };
 
   modifyFlashcard = (e, id) => {
@@ -102,14 +104,46 @@ axios
   render() {
     return (
       <div className="row">
-      <div className={"col-md-6 bg-primary p-4 " + displayCorners("left")}>
-      <p className="display-9 text-center my-4">Flashcard set nr {this.state.flashcard_set_id}</p>
+      {this.state.mode === "memorize" ? (
+        <>
+        <div className={"col-md-9 bg-primary p-4 flashcardset-memorize-container " + displayCorners("left")}>
+        <p className="display-9 text-center my-4">Study "{this.state.flashcard_set.title}"</p>
+        <FlashcardsMemorizeContainer
+        flashcards= {this.state.flashcards}
+        />
+        </div>
+        <div className={"col-md-3 bg-secondary p-4 flashcardset-memorize-container " + displayCorners("right")}>
+        <button className="btn btn-primary btn-block my-3"
+        onClick={(e) => {
+          e.preventDefault();
+          this.setState({
+            mode: "",
+          });
+          }}
+          >Settings</button>
+      </div>
+        </>
+      ) : (
+      <>
+      <div className={"col-md-6 bg-primary p-4 flashcardset-list-container  " + displayCorners("left")}>
+      <p className="display-9 text-center my-4">"{this.state.flashcard_set.title}" flashcard set</p>
       <FlashcardsList
       listMode="shared"
+      flashcards= {this.state.flashcards}
       />
       </div>
-      <div className={"col-md-6 bg-secondary p-4 " + displayCorners("right")}>
+      <div className={"col-md-6 bg-secondary p-4 flashcardset-list-container  " + displayCorners("right")}>
+      <button className="btn btn-primary btn-block my-3"
+      onClick={(e) => {
+        e.preventDefault();
+        this.setState({
+          mode: "memorize",
+        });
+        }}
+        >Memorize</button>
     </div>
+    </>
+    )}
     </div>
     );
   }

@@ -68,6 +68,14 @@
   animation: 1s ease-in 0s 1 fade-in;
 }
 
+.flashcardset-list-container {
+  animation: 1s ease-in 0s 1 fade-in;
+}
+
+.flashcardset-memorize-container {
+  animation: 1s ease-in 0s 1 fade-in;
+}
+
 @keyframes fade-in {
   from {opacity: 0;}
   to {opacity: 1;}
@@ -84,4 +92,158 @@ filter: brightness(90%);
 
 .p-2rem {
   padding: 2rem;
+}
+
+:root {
+  --backgroundColor: #21252e;
+  --firstColor: #ffa719;
+  --secondColor: #e56660;
+  --thirdColor: #b94a53;
+  --fourthColor: #4b345e;
+  --fifthColor: #724e94;
+  --sixthColor: #15c583;
+}
+
+.memorize-container {
+  display: flex;
+  width: 100%;
+  height: 400px;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.memorize-card .front {
+  position: absolute;
+  width: 90%;
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  font-family: sans-serif;
+}
+
+.memorize-card .back  {
+  backface-visibility: hidden;
+  transform: rotateY(180deg);
+  position: absolute;
+  width: 90%;
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  font-family: sans-serif;
+}
+
+
+.memorize-card {
+  display: flex;
+  position: absolute;
+  width: 600px;
+  height: 300px;
+  box-shadow: 0 0 2px 0 #000;
+  border-radius: 8px;
+  transition: all .3s ease-out;
+  transform-style: preserve-3d;
+
+}
+
+
+
+.first, .second, .third, .fourth, .fifth {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  font-family: sans-serif;
+  color: var(--backgroundColor);
+
+
+
+}
+
+.first {
+  z-index: 5;
+}
+
+.second {
+ z-index: 4;
+ transform: translate(10px, 10px);
+}
+
+.third {
+  z-index: 3;
+  transform: translate(20px, 20px);
+}
+
+.fourth {
+  z-index: 2;
+  transform: translate(30px, 30px);
+}
+
+.fifth {
+  z-index: 1;
+  transform: translate(40px, 40px);
+}
+
+.first-color {
+  background-color: var(--firstColor);
+}
+
+.second-color {
+  background-color: var(--secondColor);
+}
+
+.third-color {
+  background-color: var(--thirdColor);
+}
+
+.fourth-color {
+  background-color: var(--fourthColor);
+}
+
+.fifth-color {
+  background-color: var(--fifthColor);
+}
+
+.sixth-color {
+  background-color: var(--sixthColor);
+}
+
+
+.flashcard-buttons {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.memorize-answer-container {
+  height: 50%;
+  display: flex;
+}
+.memorize-answer-text {
+  align-items: end;
+  display: flex;
+}
+
+.flipped {
+transform: perspective(800px) rotateY(180deg) !important;
+}
+
+@media (max-width: 700px) {
+  .memorize-card {
+  width: 70%;
+  height: 20%;
+  }
+  .memorize-container {
+    height: 250px;
+  }
+  .first, .second, .third, .fourth, .fifth {
+    font-size: 1.5rem;
+  }
 }
