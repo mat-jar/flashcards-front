@@ -238,7 +238,7 @@ transform: perspective(800px) rotateY(180deg) !important;
 @media (max-width: 700px) {
   .memorize-card {
   width: 70%;
-  height: 20%;
+  height: 190px;
   }
   .memorize-container {
     height: 250px;
