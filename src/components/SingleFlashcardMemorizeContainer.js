@@ -14,15 +14,16 @@ export default function SingleFlashcardMemorizeContainer(props) {
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  props.switchCard(props.flashcard, "correct");
+                  props.switchCard("correct");
         }} >I knew it</button>
 
         <button className="btn btn-danger btn-block my-3"
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
-          props.switchCard(props.flashcard, "wrong");
-          }} >Show me again</button>
+          props.switchCard("wrong");
+          }}
+           >Show me again</button>
         </div>
         </div>
         </>

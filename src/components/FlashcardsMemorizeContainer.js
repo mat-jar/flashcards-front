@@ -99,23 +99,25 @@ function toggleCard() {
  setIsToggled(!isToggled);
 }
 
-function switchCard(flashcard, option) {
+function switchCard(option) {
 
-  if (option=="correct") {
-    const [first, ...rest] = remainedFlashcards;
-    toggleCard()
-    setRemainedFlashcards(rest);
+  const flashcard_on_top = remainedFlashcards[0]
+
+  if (isToggled===true){
+    if (option=="correct") {
+      const [first, ...rest] = remainedFlashcards;
+      toggleCard()
+      setRemainedFlashcards(rest);
+    }
+
+   if (option=="wrong") {
+     const [first, ...rest] = remainedFlashcards;
+     toggleCard()
+     setRemainedFlashcards(rest.concat(first));
+
+   }
   }
-
-
- if (option=="wrong") {
-   const [first, ...rest] = remainedFlashcards;
-   toggleCard()
-   setRemainedFlashcards(rest.concat(first));
-
-
- }
-  setFlashcardsColoursHash(new Map(flashcardsColoursHash.set(remainedFlashcards[6], flashcardsColoursHash.get(flashcard))));
+  setFlashcardsColoursHash(new Map(flashcardsColoursHash.set(remainedFlashcards[6], flashcardsColoursHash.get(flashcard_on_top))));
 }
 
 
@@ -127,6 +129,27 @@ useEffect(() => {
 
 });
 
+function handleKeyDown(event) {
+  event.preventDefault();
+  if (event.key === ' ') {
+   toggleCard();
+  }
+  else if (event.key === 'ArrowUp') {
+   switchCard("correct");
+ }
+ else if (event.key === 'ArrowDown') {
+  switchCard("wrong");
+}
+ };
+
+ useEffect(() => {
+   window.addEventListener('keydown', handleKeyDown);
+   // cleanup this component
+   return () => {
+     window.removeEventListener('keydown', handleKeyDown);
+     };
+   });
+
 
 
   return(
@@ -137,7 +160,7 @@ useEffect(() => {
       const color = flashcardsColoursHash.get(flashcard);
       return(
       <div className={`memorize-card ${numbersHash.get(i+1)} ${color} ` + ((isToggled && topFlashcard==i) ? "flipped" : "") } onClick={toggleCard} key={flashcard.id}>
-        <SingleFlashcardMemorizeContainer key={flashcard.id} color={color} flashcard={flashcard} number={numbersHash.get(i+1)} switchCard={(flashcard, option) => switchCard(flashcard, option)}/>
+        <SingleFlashcardMemorizeContainer key={flashcard.id} color={color} flashcard={flashcard} number={numbersHash.get(i+1)} switchCard={(option) => switchCard(option)}/>
       </div>
     );
 
