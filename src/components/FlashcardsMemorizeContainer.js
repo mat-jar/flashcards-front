@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useLayoutEffect} from "react";
 import SingleFlashcardMemorizeContainer from "./SingleFlashcardMemorizeContainer";
+import ProgressBar from "./ProgressBar";
 
 export default function FlashcardsMemorizeContainer(props) {
 
@@ -155,6 +156,16 @@ function handleKeyDown(event) {
   return(
 
     <div className="memorize-container">
+    <ProgressBar all={props.flashcards.length} completed={remainedFlashcards.length}/>
+
+    {remainedFlashcards.length===0 && (
+      <div className="memorize-start-again"
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setRemainedFlashcards(props.flashcards);
+        }}>Start again</div>
+    )}
 
     {remainedFlashcards.slice(0,5).map((flashcard, i) => {
       const color = flashcardsColoursHash.get(flashcard);

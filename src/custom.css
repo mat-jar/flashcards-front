@@ -110,6 +110,7 @@ filter: brightness(90%);
   height: 400px;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 
 }
 
@@ -246,4 +247,32 @@ transform: perspective(800px) rotateY(180deg) !important;
   .first, .second, .third, .fourth, .fifth {
     font-size: 1.5rem;
   }
+}
+
+
+.flashcards-progress-bar-container {
+  transform: translate(0, -180px);
+  height: 25px;
+  width: 80%;
+  border-radius: 50px;
+  margin: 50px;
+  background-color: #e0e0de;
+}
+
+.flashcards-progress-bar-filler {
+  border-radius: inherit;
+  text-align: right;
+  background-color: #ffa719;
+  height: 100%;
+  transition: width 0.8s ease-in-out;
+}
+
+.flashcards-progress-bar-text{
+  padding: 5px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.memorize-start-again {
+  position: absolute;
 }
