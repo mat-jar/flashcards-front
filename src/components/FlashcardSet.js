@@ -141,6 +141,44 @@ axios
         });
         }}
         >Memorize</button>
+
+        <button className="btn btn-primary btn-block my-3"
+        onClick={(e) => {
+          e.preventDefault();
+          this.setState({
+            mode: "memorize",
+          });
+          }}
+          >Test</button>
+
+          <button className="btn btn-primary btn-block my-3"
+          onClick={(e) => {
+            e.preventDefault();
+            this.setState({
+              mode: "memorize",
+            });
+            }}
+            >Find pairs game</button>
+
+            <button className="btn btn-primary btn-block my-3"
+            onClick={(e) => {
+              e.preventDefault();
+              this.setState({
+                mode: "memorize",
+              });
+              }}
+              >Glue the pieces</button>
+
+              <button className="btn btn-primary btn-block my-3"
+              onClick={(e) => {
+                e.preventDefault();
+                this.setState({
+                  mode: "memorize",
+                });
+                }}
+                >Flick through</button>
+
+
     </div>
     </>
     )}

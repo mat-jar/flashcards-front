@@ -116,6 +116,7 @@ filter: brightness(90%);
 
 .memorize-card .front {
   position: absolute;
+  backface-visibility: hidden;
   width: 90%;
   height: 90%;
   display: flex;
@@ -236,20 +237,6 @@ filter: brightness(90%);
 transform: perspective(800px) rotateY(180deg) !important;
 }
 
-@media (max-width: 700px) {
-  .memorize-card {
-  width: 70%;
-  height: 190px;
-  }
-  .memorize-container {
-    height: 250px;
-  }
-  .first, .second, .third, .fourth, .fifth {
-    font-size: 1.5rem;
-  }
-}
-
-
 .flashcards-progress-bar-container {
   transform: translate(0, -180px);
   height: 25px;
@@ -275,4 +262,20 @@ transform: perspective(800px) rotateY(180deg) !important;
 
 .memorize-start-again {
   position: absolute;
+}
+
+@media (max-width: 700px) {
+  .memorize-card {
+  width: 70%;
+  height: 190px;
+  }
+  .memorize-container {
+    height: 250px;
+  }
+  .first, .second, .third, .fourth, .fifth {
+    font-size: 1.5rem;
+  }
+  .flashcards-progress-bar-container {
+    transform: translate(0, -125px);
+  }
 }
