@@ -1,5 +1,4 @@
 import LogIn from "./LogIn";
-import SignUp from "./SignUp";
 import FlashcardSetsList from "./FlashcardSetsList";
 import {displayCorners} from '../Utils'
 
@@ -7,7 +6,7 @@ import {displayCorners} from '../Utils'
 export default function Home(props) {
 
   const currentUser = props.currentUser;
-  
+
   return(
 
 
@@ -32,6 +31,7 @@ export default function Home(props) {
     <p className="display-9 text-center my-4">Log in to practice your flashcard sets or to create new ones</p>
     <div className="col-md-6 align-self-center">
     <LogIn setUser={() => props.setUser()}
+          currentUser={currentUser}
            source="home"
             />
     </div>

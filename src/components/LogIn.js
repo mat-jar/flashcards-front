@@ -1,171 +1,120 @@
-import React, { Component } from "react";
-import Form from "react-validation/build/form";
-import Input from "react-validation/build/input";
-import CheckButton from "react-validation/build/button";
+import React, {useEffect} from "react";
+
 import AuthService from "../services/AuthService";
 import { useNavigate} from "react-router-dom";
-
-const required = value => {
-  if (!value) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        This field is required!
-      </div>
-    );
-  }
-};
+import { withFormik, Form, Field } from 'formik'
 
 
 
- class LogIn extends Component {
-  constructor(props) {
-    super(props);
-    this.handleLogin = this.handleLogin.bind(this);
-    this.onChangeEmail = this.onChangeEmail.bind(this);
-    this.onChangePassword = this.onChangePassword.bind(this);
-    this.state = {
-      email: "",
-      password: "",
-      loading: false,
-      successful: false,
-      message: ""
-    };
-  }
-  onChangeEmail(e) {
-    this.setState({
-      email: e.target.value
-    });
-  }
-  onChangePassword(e) {
-    this.setState({
-      password: e.target.value
-    });
-  }
+function Login(props) {
 
-  handleLogin(e) {
-    const {navigation} = this.props;
-    const source = this.props.source;
-    e.preventDefault();
-    this.setState({
-      message: "",
-      loading: true,
-      successful: false
-    });
-    this.form.validateAll();
-    if (this.checkBtn.context._errors.length === 0) {
-      AuthService.login(this.state.email, this.state.password).then(
-        response => {
-          this.setState({
-            message: response.data.message,
-            successful: true
-          });
-          this.props.setUser();
-          if (source === "navbar") {
-          const timer = setTimeout(() => {
-            navigation("/dashboard")
-          }, 1000);
-          return () => clearTimeout(timer);
-          }
+  const navigation = useNavigate();
+  const { values } = props;
 
-        },
-        error => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          this.setState({
-            loading: false,
-            message: resMessage
-          });
-        }
-      );
-    } else {
-      this.setState({
-        loading: false
-      });
+  useEffect(() => {
+    if (props.currentUser) {
+    const timer = setTimeout(() => {
+      navigation("/dashboard");
+    }, 1000);
+      return () => clearTimeout(timer);
     }
-  }
-  render() {
+
+  });
+
 
     return (
+      <>
 
       <div className="row justify-content-md-center">
       <div className="col-xl p-2">
         <div className="card card-container p-2 my-3">
-          <Form
-            onSubmit={this.handleLogin}
-            ref={c => {
-              this.form = c;
-            }}
-          >
-          {!this.state.successful && (
+          <Form>
+          {!values.successful && (
             <div>
             <div className="form-group">
               <label htmlFor="email">Email</label>
-              <Input
-                type="text"
-                className="form-control"
-                name="email"
-                value={this.state.email}
-                onChange={this.onChangeEmail}
-                validations={[required]}
-              />
+              <Field type="text" name="email" className={"form-control"} placeholder="Email" />
             </div>
             <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <Input
-                type="password"
-                className="form-control"
-                name="password"
-                value={this.state.password}
-                onChange={this.onChangePassword}
-                validations={[required]}
-              />
+            <label htmlFor="password">Password</label>
+                <Field type="password" name="password" className={"form-control"} placeholder="Password" />
             </div>
-            <div className="form-group">
-              <button
-                className="btn btn-primary btn-block my-3"
-                disabled={this.state.loading}
-              >
-                {this.state.loading && (
+            <button type="submit" className="btn btn-primary btn-block my-3"
+                disabled={values.loading}>
+                {values.loading && (
                   <span className="spinner-border spinner-border-sm"></span>
                 )}
                 <span>Log in</span>
               </button>
             </div>
-            </div>
           )}
-            {this.state.message && (
+            {values.message && (
               <div className="form-group">
                 <div
                   className={
-                    this.state.successful
+                    values.successful
                       ? "alert alert-success"
                       : "alert alert-danger"
                   }
                   role="alert"
                 >
-                  {this.state.message}
+                  {values.message}
+                  {(() => { if (props.source === "navbar") {
+                  const timer = setTimeout(() => {
+                    navigation("/dashboard");
+                  }, 1000);
+                    return () => clearTimeout(timer);
+                  }})()}
                 </div>
               </div>
             )}
-            <CheckButton
-              style={{ display: "none" }}
-              ref={c => {
-                this.checkBtn = c;
-              }}
-            />
           </Form>
         </div>
       </div>
       </div>
+      </>
     );
-  }
 }
-export default function LogInWrapper(props) {
-  const navigation = useNavigate();
 
-  return <LogIn {...props} navigation={navigation} />;
-}
+
+function handleLogin(values, formikBag) {
+    const props = formikBag.props
+    AuthService.login(values.email, values.password).then(
+    response => {
+    formikBag.setFieldValue('message', response.data.message, false)
+    formikBag.setFieldValue('successful', true, false)
+    props.setUser();
+
+
+  },
+  error => {
+    const resMessage =
+      (error.response &&
+        error.response.data &&
+        error.response.data.message) ||
+      error.message ||
+      error.toString();
+      formikBag.setFieldValue('message', resMessage, false)
+      formikBag.setFieldValue('loading', false, false)
+    });
+  }
+
+
+
+
+const LoginFormik = withFormik({
+  mapPropsToValues: (props) => {
+    return {
+      email: props.email || '',
+      password: props.password || '',
+      successful: false,
+      message: '',
+      loading: false
+    }
+  },
+  handleSubmit: (values, formikBag) => {
+    handleLogin(values, formikBag)
+  }
+})(Login)
+
+export default LoginFormik

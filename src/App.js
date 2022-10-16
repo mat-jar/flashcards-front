@@ -14,6 +14,7 @@ import Search from "./components/Search";
 import LogIn from "./components/LogIn";
 import SignUp from "./components/SignUp";
 import ProfileSettings from "./components/ProfileSettings";
+import Dashboard from "./components/Dashboard";
 import AuthService from "./services/AuthService";
 
 
@@ -92,6 +93,7 @@ class App extends Component {
 
             <Route path="*" element={<NoMatch />} />
             <Route exact path="/login" element={<LogIn
+                        currentUser={currentUser}
                         setUser={() => this.setUser()}
                         source="navbar"
                          />} />
@@ -99,6 +101,10 @@ class App extends Component {
             <Route exact path="/profilesettings" element={<ProfileSettings
                          currentUser={currentUser}
                          />} />
+             <Route exact path="/dashboard" element={<Dashboard
+                          currentUser={currentUser}
+                          />} />
+            
 
           </Routes>
           </div>
