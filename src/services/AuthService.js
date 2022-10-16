@@ -37,12 +37,15 @@ class AuthService {
           });
 
   }
-  register(email, password) {
+  register(email, password, name, role, teacher_token) {
     return axios
       .post(API_URL, { user:
         {
         email,
-        password
+        password,
+        name,
+        role,
+        ...(teacher_token ? { teacher_token } : {})
       }
     })
     .then(response => {
