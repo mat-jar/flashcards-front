@@ -99,19 +99,19 @@ filter: brightness(90%);
   --firstColor: #ffa719;
   --secondColor: #e56660;
   --thirdColor: #b94a53;
-  --fourthColor: #4b345e;
-  --fifthColor: #724e94;
+  --fourthColor: #724e94;
+  --fifthColor: #77c42b;
   --sixthColor: #15c583;
 }
 
 .memorize-container {
   display: flex;
   width: 100%;
-  height: 400px;
-  justify-content: center;
+  height: 480px;
+  justify-content: end;
   align-items: center;
   flex-direction: column;
-
+  position: relative;
 }
 
 .memorize-card .front {
@@ -145,13 +145,13 @@ filter: brightness(90%);
 .memorize-card {
   display: flex;
   position: absolute;
-  width: 600px;
-  height: 300px;
+  width: 55%;
+  height: 60%;
   box-shadow: 0 0 2px 0 #000;
   border-radius: 8px;
   transition: all .3s ease-out;
   transform-style: preserve-3d;
-
+  margin-bottom: 50px;
 }
 
 
@@ -238,11 +238,10 @@ transform: perspective(800px) rotateY(180deg) !important;
 }
 
 .flashcards-progress-bar-container {
-  transform: translate(0, -180px);
+  transform: translate(0, -365px);
   height: 25px;
   width: 80%;
   border-radius: 50px;
-  margin: 50px;
   background-color: #e0e0de;
 }
 
@@ -262,6 +261,47 @@ transform: perspective(800px) rotateY(180deg) !important;
 
 .memorize-start-again {
   position: absolute;
+}
+
+.memorize-options {
+  transform: translate(0, -385px);
+}
+
+input:focus{
+  outline: none;
+}
+
+.grow-wrap {
+  /* easy way to plop the elements on top of each other and have them both sized based on the tallest one's height */
+  display: grid;
+}
+.grow-wrap::after {
+  /* Note the weird space! Needed to preventy jumpy behavior */
+  content: attr(data-replicated-value) " ";
+
+  /* This is how textarea text behaves */
+  white-space: pre-wrap;
+
+  /* Hidden from view, clicks, and screen readers */
+  visibility: hidden;
+}
+.grow-wrap > textarea {
+  /* You could leave this, but after a user resizes, then it ruins the auto sizing */
+  resize: none;
+  outline: none;
+
+  /* Firefox shows scrollbar on growth, you can hide like this. */
+  overflow: hidden;
+}
+.grow-wrap > textarea,
+.grow-wrap::after {
+  /* Identical styling required!! */
+  border: 1px solid black;
+  padding: 1rem;
+  font: inherit;
+
+  /* Place on top of each other */
+  grid-area: 1 / 1 / 1 / 1;
 }
 
 @media (max-width: 700px) {
