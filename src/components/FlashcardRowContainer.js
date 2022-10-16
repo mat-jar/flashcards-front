@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useLayoutEffect, useState } from 'react';
+import React, { useRef, useLayoutEffect} from 'react';
 
 export default function FlashcardRowContainer(props) {
 
@@ -27,7 +27,7 @@ export default function FlashcardRowContainer(props) {
   return(
     <>
     <td className="col-6">
-    <div className="border p-2rem bg-light div-hover h-100 position-relative overflow-auto"
+    <div className="border p-2rem bg-white div-hover h-100 position-relative overflow-auto"
     ref={leftDivRef}
      >
     <label className="itemDisplay centered" key={props.flashcard.id} >{props.flashcard.front_text}</label>
@@ -35,7 +35,7 @@ export default function FlashcardRowContainer(props) {
     </td>
     <td className="col-6">
 
-    <div className="border p-2rem bg-light div-hover h-100 position-relative overflow-auto"
+    <div className="border p-2rem bg-white div-hover h-100 position-relative overflow-auto"
     ref={rightDivRef}>
     <label className="itemDisplay centered" key={props.flashcard.id}>{props.flashcard.back_text}</label>
     </div>
