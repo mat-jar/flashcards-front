@@ -3,10 +3,8 @@ import axios from "axios";
 import update from "immutability-helper";
 import {  Link } from "react-router-dom";
 import AuthService from "../services/AuthService";
-import runtimeEnv from '@mars/heroku-js-runtime-env'
 
-
-const API_URL = runtimeEnv().REACT_APP_API_URL + '/api/v1/flashcard_sets';
+const API_URL = process.env.REACT_APP_API_URL + '/api/v1/flashcard_sets';
 
 
 class FlashcardSetsList extends Component {
