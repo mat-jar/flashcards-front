@@ -1,8 +1,9 @@
-import React, {useState, useEffect, useLayoutEffect} from "react";
+import React, {useState, useEffect} from "react";
 import SingleFlashcardMemorizeContainer from "./SingleFlashcardMemorizeContainer";
 import ProgressBar from "./ProgressBar";
+import FlashcardsMemorizeOptions from "./FlashcardsMemorizeOptions";
 
-export default function FlashcardsMemorizeContainer(props) {
+export default function FlashcardsFlickThroughContainer(props) {
 
 const CARD_PEN_OFFSET = 10, //displacement of the cards
       CARD_SWITCH_RANGE = '130%';
@@ -105,13 +106,13 @@ function switchCard(option) {
   const flashcard_on_top = remainedFlashcards[0]
 
   if (isToggled===true){
-    if (option=="correct") {
+    if (option==="correct") {
       const [first, ...rest] = remainedFlashcards;
       toggleCard()
       setRemainedFlashcards(rest);
     }
 
-   if (option=="wrong") {
+   if (option==="wrong") {
      const [first, ...rest] = remainedFlashcards;
      toggleCard()
      setRemainedFlashcards(rest.concat(first));
@@ -156,7 +157,9 @@ function handleKeyDown(event) {
   return(
 
     <div className="memorize-container">
+    <FlashcardsMemorizeOptions/>
     <ProgressBar all={props.flashcards.length} completed={remainedFlashcards.length}/>
+
 
     {remainedFlashcards.length===0 && (
       <div className="memorize-start-again"
@@ -170,7 +173,7 @@ function handleKeyDown(event) {
     {remainedFlashcards.slice(0,5).map((flashcard, i) => {
       const color = flashcardsColoursHash.get(flashcard);
       return(
-      <div className={`memorize-card ${numbersHash.get(i+1)} ${color} ` + ((isToggled && topFlashcard==i) ? "flipped" : "") } onClick={toggleCard} key={flashcard.id}>
+      <div className={`memorize-card ${numbersHash.get(i+1)} ${color} ` + ((isToggled && topFlashcard===i) ? "flipped" : "") } onClick={toggleCard} key={flashcard.id}>
         <SingleFlashcardMemorizeContainer key={flashcard.id} color={color} flashcard={flashcard} number={numbersHash.get(i+1)} switchCard={(option) => switchCard(option)}/>
       </div>
     );

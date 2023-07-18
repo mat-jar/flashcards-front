@@ -15,6 +15,7 @@ import LogIn from "./components/LogIn";
 import SignUp from "./components/SignUp";
 import ProfileSettings from "./components/ProfileSettings";
 import Dashboard from "./components/Dashboard";
+import Exercices from "./components/Exercices";
 import AuthService from "./services/AuthService";
 
 
@@ -35,6 +36,10 @@ class App extends Component {
       this.setState({
         currentUser: user
       });
+    } else {
+      this.setState({
+        currentUser: "unlogged"
+      });
     }
   }
 
@@ -47,7 +52,7 @@ class App extends Component {
     }
     else {
       this.setState({
-        currentUser: undefined
+        currentUser: "unlogged"
       });
     }
   }
@@ -87,7 +92,9 @@ class App extends Component {
                                   setUser={() => this.setUser()}
                                   />} />
 
-            <Route path='/flashcard_sets/:id' element={<FlashcardSet/>} />
+            <Route path='/flashcard_sets/:id' element={<FlashcardSet
+                          currentUser={currentUser}
+                          />} />
             <Route exact path="/search" element={<Search
                           searchPhrase={searchPhrase}/>} />
 
@@ -101,11 +108,12 @@ class App extends Component {
             <Route exact path="/profilesettings" element={<ProfileSettings
                          currentUser={currentUser}
                          />} />
-             <Route exact path="/dashboard" element={<Dashboard
+            <Route exact path="/dashboard" element={<Dashboard
                           currentUser={currentUser}
                           />} />
-            
-
+            <Route exact path="/exercices" element={<Exercices
+                         currentUser={currentUser}
+                         />} />
           </Routes>
           </div>
         </div>

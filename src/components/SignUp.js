@@ -130,6 +130,11 @@ class SignUp extends Component {
       );
     }
   }
+
+  handleEdit(e) {
+    e.preventDefault();
+    console.log(e);
+  };
   render() {
     return (
       <div className="row justify-content-md-center">
@@ -137,7 +142,7 @@ class SignUp extends Component {
         <div className="card card-container p-2 my-3">
 
           <Form
-            onSubmit={this.handleRegister}
+            onSubmit={this.props.edit ==='true' ? (this.handleEdit):(this.handleRegister)}
             ref={c => {
               this.form = c;
             }}
@@ -224,7 +229,7 @@ class SignUp extends Component {
                 </>
               )}
                 <div className="form-group">
-                  <button className="btn btn-primary btn-block my-3">Sign up</button>
+                  <button className="btn btn-primary btn-block my-3">{this.props.edit ==='true' ? ('Edit profile'):('Sign up')}</button>
                 </div>
               </div>
             )}

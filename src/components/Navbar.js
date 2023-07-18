@@ -96,7 +96,7 @@ class Navbar extends Component {
   </form>
 
 
-    { currentUser ? (
+    { (currentUser && currentUser != "unlogged") ? (
 
     <ul className="navbar-nav ms-auto me-5">
 
@@ -110,13 +110,13 @@ class Navbar extends Component {
 
     <li className="nav-item">
       <Link to={"/dashboard"} className="nav-link">
-        Your flashcards dashboard
+        Dashboard
       </Link>
     </li>
 
     <li className="nav-item">
       <Link to={"/profilesettings"} className="nav-link">
-        Your profile settings
+        Profile settings
       </Link>
     </li>
 

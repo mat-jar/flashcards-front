@@ -18,7 +18,8 @@ export default function Home(props) {
   />
   </div>
   <div className={"col-md-6 bg-secondary p-4 " + displayCorners("right")}>
-  {currentUser ? (
+  {(currentUser && currentUser != "unlogged") ? (
+
     <div className="row h-100 flex-column">
     <p className="display-9 text-center my-4">Practise recently studied sets...</p>
       <div className="col-md-6 mw-100 bg-danger">Recently studied</div>

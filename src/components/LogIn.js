@@ -12,7 +12,7 @@ function Login(props) {
   const { values } = props;
 
   useEffect(() => {
-    if (props.currentUser) {
+    if (props.currentUser && props.currentUser != "unlogged") {
     const timer = setTimeout(() => {
       navigation("/dashboard");
     }, 1000);

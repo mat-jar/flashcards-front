@@ -87,23 +87,7 @@ axios
   .catch((error) => console.log(error));
 };
 
-  newFlashcardSet= (e) => {
-  if (e.key === "Enter" && !(e.target.value === "")) {
-    axios
-      .post(API_URL, { flashcard_set: { title: e.target.value } })
-      .then((response) => {
-        const flashcard_sets = update(this.state.flashcard_sets, {
-          $splice: [[0, 0, response.data]],
-        });
 
-        this.setState({
-          flashcard_sets: flashcard_sets,
-          inputValue: "",
-        });
-      })
-      .catch((error) => console.log(error));
-  }
-};
 
   render() {
     const currentUser = this.props.currentUser;
@@ -115,7 +99,7 @@ axios
             {this.state.flashcard_sets.map((flashcard_set) => {
               return (
                 <li className="list-group-item" flashcard_set={flashcard_set} key={flashcard_set.id}>
-                  <Link to={`/flashcard_sets/${flashcard_set.id}`}>
+                  <Link to={`/flashcard_sets/${flashcard_set.slug}`}>
                   <label className="itemDisplay">{flashcard_set.title}</label>
                   </Link>
                 </li>
